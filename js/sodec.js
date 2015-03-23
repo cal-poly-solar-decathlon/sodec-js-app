@@ -5,6 +5,27 @@ SLOME = (function (){
   
   var DAYSECONDS = 86400;
 
+  var DEVICE_IDS = [
+  "s-temp-out",
+  "s-temp-bed",
+  "s-temp-bath",
+  "s-temp-lr",
+  "s-hum-out",
+  "s-hum-bed",
+  "s-hum-bath",
+  "s-hum-lr",
+  "s-occ-bed",
+  "s-occ-mech",
+  "s-occ-lr",
+  "s-occ-bath",
+  "s-amb-bed",
+  "s-amb-mech",
+  "s-amb-lr",
+  "s-amb-bath",
+  "s-temp-testing-blackhole",
+  "s-temp-testing-empty"
+  ];
+  
   // copied from stackoverflow
   // http://stackoverflow.com/questions/1219860/html-encoding-in-javascript-jquery/1219983#1219983
   function htmlEscape(str) {
@@ -21,6 +42,15 @@ SLOME = (function (){
   // Jquery-using functions
   //
   ////
+
+  // create the rows in the table, each with its own id
+  function createTableRows() {
+    var tableHeader = "<tr><th>Name</th><th>Reading</th><th>age in seconds</th></td>\n"
+    var rowIds = _.map(DEVICE_IDS,function(name){return name+"-tablerow"});
+    var rowStrs = _.map(rowIds,function(id){return "<tr id=\""+id+"\"><td>UNSET</td></tr>\n"});
+    var tableRowsHtml = _.foldl(rowStrs,function(a,b) {return a.concat(b)});
+    $('#devicereadingtable').html(tableHeader + tableRowsHtml);
+  }
   
   // update the current Time span
   function updateCurrentTime(currentMsec) {
@@ -40,6 +70,12 @@ SLOME = (function (){
   // update the temperature of the bedroom
   function updateBedTemp (status){
     $('#bed-temp').html((status / 10.0).toString() );
+  }
+
+  // update the age and reading of a sensor
+  function updateTableRow(device,reading,age) {
+    var newCells = '<td>'+device+'</td><td>'+reading+'</td><td>'+age+'</td>';
+    $('#'+device+'-tablerow').html(newCells);
   }
 
   // send a request to the sodec server asynchronously
@@ -76,6 +112,14 @@ SLOME = (function (){
     }
   }
 
+  // EXTERNALLY VISIBLE:
+
+  // initialize
+  function init(){
+    createTableRows();
+  }
+  
+
   // this function is called every second to update everything
   function go(){
     var currentMsec = Date.now();
@@ -84,13 +128,21 @@ SLOME = (function (){
       var deltaTime = timestamp - Math.round(currentMsec/1000);
       updateTimestampDelta(deltaTime);
       //ugh, CPSing makes everything nasty...
-      makeRequest(
-        '/latest-event?device=s-temp-bed',
-        function(event) {
-          updateBedTempAge(timestamp - event.timestamp);
-          updateBedTemp(event.status);
-        });
+      for (var i = 0; i < DEVICE_IDS.length; i++) {
+        updateSensorStatus(timestamp,DEVICE_IDS[i]);
+      }
+;
     });
+  }
+
+  // collect the information and update one row of the
+  // table
+  function updateSensorStatus(timestamp,device){
+    makeRequest(
+      '/latest-event?device='+device,
+      function(event) {
+        updateTableRow(device,event.status,timestamp - event.timestamp);
+      });
   }
 
   // handle a click on the refresh button
@@ -109,11 +161,13 @@ SLOME = (function (){
     alert('ding!');
   }
 
-  return {go : go,
+  return {init: init,
+          go : go,
           refreshButton: refreshButton}
 }())
 
 $( document ).ready(function() {
+  SLOME.init();
   SLOME.go();
 
   // set up a handler for the refresh button
