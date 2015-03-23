@@ -141,7 +141,11 @@ SLOME = (function (){
     makeRequest(
       '/latest-event?device='+device,
       function(event) {
-        updateTableRow(device,event.status,timestamp - event.timestamp);
+        if (event == "no events") {
+          updateTableRow(device,'no reading','n/a');
+        } else {
+          updateTableRow(device,event.status,timestamp - event.timestamp);
+        }
       });
   }
 
