@@ -1,5 +1,8 @@
 SLOME = (function (){
 
+  var currentSeconds = false;
+  var currentServerSeconds = false;
+  
   var DAYSECONDS = 86400;
 
   // copied from stackoverflow
@@ -13,19 +16,30 @@ SLOME = (function (){
             .replace(/>/g, '&gt;');
   }
 
-  function updateTimestamp(data){
-    $('#timestamp').html(data);
+  ////
+  //
+  // Jquery-using functions
+  //
+  ////
+  
+  // update the current Time span
+  function updateCurrentTime(currentMsec) {
+    $('#curdate').html(new Date(currentMsec).toString());
   }
 
-  function updateBedTemp(data){
-    $('#bed-temp').html("" + (data.status / 10.0) + " degrees" );
+  // update the timestamp span
+  function updateTimestampDelta(num) {
+    $('#timestamp').html(num.toString());
   }
 
-  // construct sodec server url
-  var HOST = 'calpolysolardecathlon.org'
-  var PORT = 8080;
-  function pathToURL(path){
-    return 'http://'+HOST+':'+PORT+"/srv"+path;
+  // update the age of the bedroom temperature reading
+  function updateBedTempAge(deltaSeconds){
+    $('#bed-temp-age').html(deltaSeconds.toString());
+  }
+
+  // update the temperature of the bedroom
+  function updateBedTemp (status){
+    $('#bed-temp').html((status / 10.0).toString() );
   }
 
   // send a request to the sodec server asynchronously
@@ -33,6 +47,14 @@ SLOME = (function (){
     $.ajax({url: pathToURL(path),
             success: successFun,
             dataType: 'json'});
+  }
+
+
+  // construct sodec server url
+  var HOST = 'calpolysolardecathlon.org'
+  var PORT = 8080;
+  function pathToURL(path){
+    return 'http://'+HOST+':'+PORT+"/srv"+path;
   }
 
   // get the timestamp, hand it off to the continuation
@@ -54,10 +76,21 @@ SLOME = (function (){
     }
   }
 
+  // this function is called every second to update everything
   function go(){
-    getTimestamp(updateTimestamp);
-    //makeRequest('/timestamp',updateTimestamp);
-    makeRequest('/latest-event?device=s-temp-bed',updateBedTemp);
+    var currentMsec = Date.now();
+    updateCurrentTime(currentMsec);
+    getTimestamp(function(timestamp) {
+      var deltaTime = timestamp - Math.round(currentMsec/1000);
+      updateTimestampDelta(deltaTime);
+      //ugh, CPSing makes everything nasty...
+      makeRequest(
+        '/latest-event?device=s-temp-bed',
+        function(event) {
+          updateBedTempAge(timestamp - event.timestamp);
+          updateBedTemp(event.status);
+        });
+    });
   }
 
   // handle a click on the refresh button
@@ -90,10 +123,4 @@ $( document ).ready(function() {
   });
 
   var intervalID = window.setInterval(SLOME.go, 1000);
-  //GeneratePassword.start();
-  // set up a handler for the go button
-  /*$( "#gobutton" ).click(function( event ) {
-    GeneratePassword.gobuttonclick();
-    event.preventDefault();
-    });*/
 });
