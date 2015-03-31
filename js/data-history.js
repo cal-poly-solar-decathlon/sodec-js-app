@@ -1,4 +1,4 @@
-SLOME = (function (){
+DataHistory = (function (){
 
   var DAYSECONDS = 86400;
 
@@ -40,15 +40,6 @@ SLOME = (function (){
   //
   ////
 
-  // create the rows in the table, each with its own id
-  function createTableRows() {
-    var tableHeader = "<tr><th>Name</th><th>Reading</th><th>age in seconds</th></td>\n"
-    var rowIds = _.map(DEVICE_IDS,function(name){return name+"-tablerow"});
-    var rowStrs = _.map(rowIds,function(id){return "<tr id=\""+id+"\"><td>UNSET</td></tr>\n"});
-    var tableRowsHtml = _.foldl(rowStrs,function(a,b) {return a.concat(b)});
-    $('#devicereadingtable').html(tableHeader + tableRowsHtml);
-  }
-  
   // update the current Time span
   function updateCurrentTime(currentMsec) {
     $('#curdate').html(new Date(currentMsec).toString());
@@ -57,12 +48,6 @@ SLOME = (function (){
   // update the timestamp span
   function updateTimestampDelta(num) {
     $('#timestamp').html(num.toString());
-  }
-
-  // update the age and reading of a sensor
-  function updateTableRow(device,reading,age) {
-    var newCells = '<td>'+device+'</td><td>'+reading+'</td><td>'+age+'</td>';
-    $('#'+device+'-tablerow').html(newCells);
   }
 
   // send a request to the sodec server asynchronously
@@ -103,7 +88,22 @@ SLOME = (function (){
 
   // initialize
   function init(){
-    createTableRows();
+    var currentMsec = Date.now();
+    updateCurrentTime(currentMsec);
+    getTimestamp(function(timestamp) {
+      var deltaTime = timestamp - Math.round(currentMsec/1000);
+      updateTimestampDelta(deltaTime);
+      // more idiomatic way to write this?
+      var canvas = $('#historybar')[0];
+      if (!canvas) {
+        alert("can't find history bar");
+      } else if (!canvas.getContext) {
+        alert("no support for canvas getContext");
+      } else {
+        var ctx = canvas.getContext('2d');
+        alert("yay!");
+      }
+    })
   }
   
 
@@ -122,50 +122,11 @@ SLOME = (function (){
     });
   }
 
-  // collect the information and update one row of the
-  // table
-  function updateSensorStatus(timestamp,device){
-    makeRequest(
-      '/latest-event?device='+device,
-      function(event) {
-        if (event == "no events") {
-          updateTableRow(device,'no reading','n/a');
-        } else {
-          updateTableRow(device,event.status,timestamp - event.timestamp);
-        }
-      });
-  }
-
-  // handle a click on the refresh button
-  function refreshButton(){
-    getTimestamp(
-      function(ts){
-        makeRequest(
-          '/events-in-range?device=s-temp-bed?start='+(ts-DAYSECONDS)+';end='+ts,
-          function(data){
-            $('#numevents').html(data.seriesData.length)
-          })
-      });
-    /*$.ajax({url: 'http://'+host+':8080/srv/events-in-range?device=s-temp-bed',
-       success: lastHoursData,
-       dataType: 'json'});*/
-    alert('ding!');
-  }
-
-  return {init: init,
-          go : go,
-          refreshButton: refreshButton}
+  return {init: init}
 }())
 
 $( document ).ready(function() {
-  SLOME.init();
-  SLOME.go();
+  DataHistory.init();
 
-  // set up a handler for the refresh button
-  $( "#refreshbutton" ).click(function( event ) {
-    SLOME.refreshButton();
-    event.preventDefault();
-  });
-
-  var intervalID = window.setInterval(SLOME.go, 1000);
+  //var intervalID = window.setInterval(SLOME.go, 1000);
 });
