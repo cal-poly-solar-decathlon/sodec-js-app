@@ -3,9 +3,9 @@ SLOME = (function (){
   var DAYSECONDS = 86400;
 
   var DEVICE_IDS = [
-  "s-temp-out",
-  "s-temp-bed",
-  "s-temp-bath",
+    "s-temp-out",
+    "s-temp-bed",
+    "s-temp-bath",
   "s-temp-lr",
   "s-hum-out",
   "s-hum-bed",
@@ -19,6 +19,30 @@ SLOME = (function (){
   "s-amb-mech",
   "s-amb-lr",
   "s-amb-bath",
+  "s-elec-used-laundry",
+  "s-elec-used-dishwasher",
+  "s-elec-used-refrigerator",
+  "s-elec-used-induction-stove",
+  "s-elec-used-ewh-solar-water-heater",
+  "s-elec-used-kitchen-receps-1",
+  "s-elec-used-kitchen-receps-2",
+  "s-elec-used-living-receps",
+  "s-elec-used-dining-receps-1",
+  "s-elec-used-dining-receps-2",
+  "s-elec-used-bathroom-receps",
+  "s-elec-used-bedroom-receps-1",
+  "s-elec-used-bedroom-receps-2",
+  "s-elec-used-mechanical-receps",
+  "s-elec-used-entry-receps",
+  "s-elec-used-exterior-receps",
+  "s-elec-used-grey-water-pump-recep",
+  "s-elec-used-black-water-pump-recep",
+  "s-elec-used-thermal-loop-pump-recep",
+  "s-elec-used-water-supply-pump-recep",
+  "s-elec-used-water-supply-booster-pump-recep",
+  "s-elec-used-vehicle-changing-recep",
+  "s-elec-used-heat-pump-recep",
+  "s-elec-used-air-handler-recep",
   "s-temp-testing-blackhole",
   "s-temp-testing-empty",
   "s-light-entry-bookend-1A",
@@ -34,9 +58,10 @@ SLOME = (function (){
   "s-light-bedroom-uplight-6A",
   "s-light-bedroom-cabinet-6B",
   "s-light-porch-lights-8A",
-  "s-light-uplights-and-pot-lights-8B"
-  ];
+  "s-light-uplights-and-pot-lights-8B"];
+
   
+
   // copied from stackoverflow
   // http://stackoverflow.com/questions/1219860/html-encoding-in-javascript-jquery/1219983#1219983
   function htmlEscape(str) {
@@ -80,18 +105,24 @@ SLOME = (function (){
   }
 
   // send a request to the sodec server asynchronously
-  function makeRequest(path,successFun){
+  function makeRequest(path,successFun,errorFun){
     $.ajax({url: pathToURL(path),
             success: successFun,
+            error: errorFun,
             dataType: 'json'});
   }
 
 
   // construct sodec server url
   var HOST = 'calpolysolardecathlon.org'
-  var PORT = 8080;
+
+  // get the value of the port radio button that is checked
+  function getPort(){
+    return $('input[name=port]:checked', '#portForm').val();
+  }
+
   function pathToURL(path){
-    return 'http://'+HOST+':'+PORT+"/srv"+path;
+    return 'http://'+HOST+':'+getPort()+"/srv"+path;
   }
 
   // get the timestamp, hand it off to the continuation
@@ -145,39 +176,30 @@ SLOME = (function (){
         } else {
           updateTableRow(device,event.status,timestamp - event.timestamp);
         }
+      },
+      function(jqXHR,textStatus,errorThrown){
+        updateTableRow(device,'error on read','n/a');
       });
   }
 
-  // handle a click on the refresh button
-  function refreshButton(){
-    getTimestamp(
-      function(ts){
-        makeRequest(
-          '/events-in-range?device=s-temp-bed?start='+(ts-DAYSECONDS)+';end='+ts,
-          function(data){
-            $('#numevents').html(data.seriesData.length)
-          })
-      });
-    /*$.ajax({url: 'http://'+host+':8080/srv/events-in-range?device=s-temp-bed',
-       success: lastHoursData,
-       dataType: 'json'});*/
-    alert('ding!');
+  // set the PORT:
+  function setPort(port){
+    PORT=port;
   }
-
+  
   return {init: init,
-          go : go,
-          refreshButton: refreshButton}
+          go : go}
 }())
 
 $( document ).ready(function() {
   SLOME.init();
   SLOME.go();
 
-  // set up a handler for the refresh button
-  $( "#refreshbutton" ).click(function( event ) {
-    SLOME.refreshButton();
-    event.preventDefault();
+  // refresh immediately when the radio choice changes:
+  $(".portButton").click(function( event ) {
+    SLOME.go()
   });
 
-  var intervalID = window.setInterval(SLOME.go, 1000);
+
+  var intervalID = window.setInterval(SLOME.go, 5000);
 });
