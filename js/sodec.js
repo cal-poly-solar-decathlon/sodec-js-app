@@ -82,7 +82,8 @@ SLOME = (function (){
 
   // create the rows in the table, each with its own id
   function createTableRows() {
-    var tableHeader = "<tr><th>Name</th><th>Reading</th><th>age in seconds</th></td>\n"
+    var tableHeader = "<tr><th>Name</th><th>Reading</th><th>age in H:M:S</th>"
+        + "<th># in last hr</th></td>\n"
     var rowIds = _.map(DEVICE_IDS,function(name){return name+"-tablerow"});
     var rowStrs = _.map(rowIds,function(id){return "<tr id=\""+id+"\"><td>UNSET</td></tr>\n"});
     var tableRowsHtml = _.foldl(rowStrs,function(a,b) {return a.concat(b)});
@@ -100,8 +101,9 @@ SLOME = (function (){
   }
 
   // update the age and reading of a sensor
-  function updateTableRow(device,reading,age) {
-    var newCells = '<td>'+device+'</td><td>'+reading+'</td><td>'+age+'</td>';
+  function updateTableRow(device,reading,age,eventCount) {
+    var newCells = ('<td>'+device+'</td><td>'+reading+'</td><td>'+age+'</td><td>'
+                    + eventCount+'</td>');
     $('#'+device+'-tablerow').html(newCells);
   }
 
@@ -113,6 +115,11 @@ SLOME = (function (){
             dataType: 'json'});
   }
 
+  ////
+  //
+  // Non-Jquery-using-functions
+  //
+  ////
 
   // construct sodec server url
   var HOST = 'calpolysolardecathlon.org'
@@ -124,6 +131,26 @@ SLOME = (function (){
 
   function pathToURL(path){
     return 'http://'+HOST+':'+getPort()+"/srv"+path;
+  }
+
+  // pad an integer. This should be nicer...
+  function padTo2Digits(n){
+    if ((n < 0)||(n > 59)) {
+      alert('padTo2Digits expected integer in [0,59], got '+n);
+    } else {
+      if (n < 10) {
+        return '0'+n;
+      } else {
+        return n;
+      }
+    }
+  }
+
+  // given a number of seconds, map it to an "H:M:S" string
+  function secondsToHMS(n) {
+    return ("" + Math.round(n/3600) + ":"
+            + padTo2Digits(Math.round(n/60) % 60) + ":"
+            + padTo2Digits(n % 60));
   }
 
   // get the timestamp, hand it off to the continuation
@@ -175,11 +202,19 @@ SLOME = (function (){
         if (event == "no events") {
           updateTableRow(device,'no reading','n/a');
         } else {
-          updateTableRow(device,event.status,timestamp - event.timestamp);
+          makeRequest(
+            ('/count-events-in-range?device='+device+'&start='+(timestamp - 3600)
+              + '&end='+timestamp),
+            function(eventCount){
+              updateTableRow(device,event.status,
+                             secondsToHMS(timestamp - event.timestamp),
+                             eventCount);
+            }
+          )
         }
       },
       function(jqXHR,textStatus,errorThrown){
-        updateTableRow(device,'error on read','n/a');
+        updateTableRow(device,'error on read','n/a','n/a');
       });
   }
 
