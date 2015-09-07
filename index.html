@@ -1,74 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="SolarHouseApp">
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link href="../SolarHouseJSSite/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-    <link href="../SolarHouseJSSite/css/animate.css" type="text/css" rel="stylesheet" />
-    <link href="../SolarHouseJSSite/css/styles.css" type="text/css" rel="stylesheet" />
-    <link href="../SolarHouseJSSite/node_modules/angular-loading-bar/src/loading-bar.css" />
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="css/animate.css" type="text/css" rel="stylesheet" />
+    <link href="css/styles.css" type="text/css" rel="stylesheet" />
+    <link href="node_modules/angular-loading-bar/src/loading-bar.css" />
 </head>
 <body>
     <div class="body-container">
         <div class="container">
             <h1 id="headerTitle" class="well">Cal Poly Solar House Data Center</h1>
 
-            <div class="row">
+            <!--   <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="temperatureSensorTab">
                     <h2>Temperature Sensor</h2>
-                    <a href="../SolarHouseJSSite/s_temp/s_temp_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_temp/s_temp_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="humiditySensorTab">
                     <h2>Humidity Sensor</h2>
-                    <a href="../SolarHouseJSSite/s_hum/s_hum_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_hum/s_hum_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="occupancySensorTab">
                     <h2>Occupancy Sensor</h2>
-                    <a href="../SolarHouseJSSite/s_occ/s_occ_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_occ/s_occ_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="ambientLightTab">
                     <h2>Ambient Light</h2>
-                    <a href="../SolarHouseJSSite/s_amb/s_amb_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_amb/s_amb_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="lightControlsTab">
                     <h2>Light Controls</h2>
-                    <a href="../SolarHouseJSSite/c_light/c_light_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="c_light/c_light_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="lightSensorTab">
                     <h2>Light Sensor</h2>
-                    <a href="../SolarHouseJSSite/s_light/s_light_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_light/s_light_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well text-center animated slideInLeft col-md-8 col-md-offset-2" id="electricitySensorTab">
                     <h2>Electricity Sensor</h2>
-                    <a href="../SolarHouseJSSite/s_elec/s_elec_chart_graph.html"><button class="btn btn-info">View Data</button></a>
+                    <a href="s_elec/s_elec_chart_graph.html"><button class="btn btn-info">View Data</button></a>
                 </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="panel panel-success" ng-controller="SolarHouseController">
+        <div class="panel-heading"><h3>Insights</h3></div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+
+        <div class="panel panel-success" ng-controller="SolarHouseController">
+        <div class="panel-heading"><h3>Current Device Status</h3></div>
+        <br/>
+        <div class="panel panel-success">
+            <div class="panel-heading"><h4>Temperature/Humidity Reading</h4></div>
+            <div class="panel-body">
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Sensor</th>
+                        <th class="text-center">Outside</th>
+                        <th class="text-center">Bedroom</th>
+                        <th class="text-center">Bathroom</th>
+                        <th class="text-center">Living Room</th>
+                        <th class="text-center">Kitchen</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>Temperature</strong></td>
+                        <td class="well" ng-class="s_temp_obj_display['s-temp-out']['concern']">{{s_temp_obj_display['s-temp-out']['status']}}</td>
+                        <td class="well" ng-class="s_temp_obj_display['s-temp-bed']['concern']">{{s_temp_obj_display['s-temp-bed']['status']}}</td>
+                        <td class="well" ng-class="s_temp_obj_display['s-temp-bath']['concern']">{{s_temp_obj_display['s-temp-bath']['status']}}</td>
+                        <td class="well" ng-class="s_temp_obj_display['s-temp-lr']['concern']">{{s_temp_obj_display['s-temp-lr']['status']}}</td>
+                        <td class="well" ng-class="s_temp_obj_display['s-temp-bath']['concern']">{{s_temp_obj_display['s-temp-kit']['status']}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Humidity</strong></td>
+                        <td class="well" ng-class="s_hum_obj_display['s-hum-out']['concern']">{{s_hum_obj_display['s-hum-out']['status']}}</td>
+                        <td class="well" ng-class="s_hum_obj_display['s-hum-bed']['concern']">{{s_hum_obj_display['s-hum-bed']['status']}}</td>
+                        <td class="well" ng-class="s_hum_obj_display['s-hum-bath']['concern']">{{s_hum_obj_display['s-hum-bath']['status']}}</td>
+                        <td class="well" ng-class="s_hum_obj_display['s-hum-lr']['concern']">{{s_hum_obj_display['s-hum-lr']['status']}}</td>
+                        <td class="well" ng-class="s_hum_obj_display['s-hum-bath']['concern']">{{s_hum_obj_display['s-hum-kit']['status']}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading"><h4>Electricity Used Reading</h4></div>
+            <div class="panel-body">
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Laundry</th>
+                        <th class="text-center">Dishwasher</th>
+                        <th class="text-center">Refrigerator</th>
+                        <th class="text-center">Stove</th>
+                        <th class="text-center">Water Heater</th>
+                        <th class="text-center">Kitchen Outlets 1</th>
+                        <th class="text-center">Kitchen Outlets 2</th>
+                        <th class="text-center">Living Room</th>
+                        <th class="text-center">Air Handler</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-laundry']['concern']">{{s_elec_obj_display['s-elec-used-laundry']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-dishwasher']['concern']">{{s_elec_obj_display['s-elec-used-dishwasher']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-refrigerator']['concern']">{{s_elec_obj_display['s-elec-used-refrigerator']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-induction-stove']['concern']">{{s_elec_obj_display['s-elec-used-induction-stove']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-ewh-solar-water-heater']['concern']">{{s_elec_obj_display['s-elec-used-ewh-solar-water-heater']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-kitchen-receps-1']['concern']">{{s_elec_obj_display['s-elec-used-kitchen-receps-1']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-kitchen-receps-2']['concern']">{{s_elec_obj_display['s-elec-used-kitchen-receps-2']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-living-receps']['concern']">{{s_elec_obj_display['s-elec-used-living-receps']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-air-handler-recep']['concern']">{{s_elec_obj_display['s-elec-used-air-handler-recep']['status']}}</td>
+                    </tr>
+                    <thead>
+                    <tr>
+                        <th class="text-center">Dining Room Outlet 1</th>
+                        <th class="text-center">Dining Room Outlet 2</th>
+                        <th class="text-center">Bathroom Outlets</th>
+                        <th class="text-center">Bedroom Outlets 1</th>
+                        <th class="text-center">Bedroom Outlets 2</th>
+                        <th class="text-center">Mechanical Room Outlets 2</th>
+                        <th class="text-center">Entry Hall Outlets</th>
+                        <th class="text-center">Exterior Outlets</th>
+                        <th class="text-center">Heat Pump</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-dining-receps-1']['concern']">{{s_elec_obj_display['s-elec-used-dining-receps-1']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-dining-receps-2']['concern']">{{s_elec_obj_display['s-elec-used-dining-receps-2']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-bathroom-receps']['concern']">{{s_elec_obj_display['s-elec-used-bathroom-receps']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-bedroom-receps-1']['concern']">{{s_elec_obj_display['s-elec-used-bedroom-receps-1']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-bedroom-receps-2']['concern']">{{s_elec_obj_display['s-elec-used-bedroom-receps-2']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-mechanical-receps']['concern']">{{s_elec_obj_display['s-elec-used-mechanical-receps']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-entry-receps']['concern']">{{s_elec_obj_display['s-elec-used-entry-receps']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-exterior-receps']['concern']">{{s_elec_obj_display['s-elec-used-exterior-receps']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-heat-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-heat-pump-recep']['status']}}</td>
+                    </tr>
+                    <thead>
+                    <tr>
+                        <th class="text-center">Greywater Pump</th>
+                        <th class="text-center">Blackwater Pump</th>
+                        <th class="text-center">Thermal Loop Pump</th>
+                        <th class="text-center">Water Supply Pump</th>
+                        <th class="text-center">Water Supply Booster Pump</th>
+                        <th class="text-center">Vehicle Charging</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-grey-water-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-grey-water-pump-recep']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-black-water-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-black-water-pump-recep']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-thermal-loop-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-thermal-loop-pump-recep']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-water-supply-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-water-supply-pump-recep']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-water-supply-booster-pump-recep']['concern']">{{s_elec_obj_display['s-elec-used-water-supply-booster-pump-recep']['status']}}</td>
+                        <td class="well" ng-class="s_elec_obj_display['s-elec-used-vehicle-charging-recep']['concern']">{{s_elec_obj_display['s-elec-used-vehicle-charging-recep']['status']}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading"><h4>Electricity Generation</h4></div>
+            <div class="panel-body">
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Main Solar Array</th>
+                        <th class="text-center">Bifacial Solar Array</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="well" ng-class="s_elec_gen_obj_display['s-elec-gen-main-array']['concern']">{{s_elec_gen_obj_display['s-elec-gen-main-array']['status']}}</td>
+                        <td class="well" ng-class="s_elec_gen_obj_display['s-elec-gen-bifacial']['concern']">{{s_elec_gen_obj_display['s-elec-gen-bifacial']['status']}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="../SolarHouseJSSite/js/bootstrap.min.js"></script>
-    <script src="../SolarHouseJSSite/js/app.js"></script>
-    <script src="../SolarHouseJSSite/js/page-transition.js"></script>
-    <script src="../SolarHouseJSSite/node_modules/angular-loading-bar/src/loading-bar.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/angular-chart.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/page-transition.js"></script>
+    <script src="node_modules/angular-loading-bar/src/loading-bar.js"></script>
+    <script src="js/manageMenu.js"></script>
 </body>
 </html>

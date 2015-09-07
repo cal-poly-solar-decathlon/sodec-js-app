@@ -15,6 +15,7 @@
     var c_light = [];
     var s_light = [];
     var s_elec = [];
+    var s_elec_gen = [];
 
     app.controller("SolarHouseController", function($scope, $http) {
         $http.get("http://calpolysolardecathlon.org:8080/srv/list-devices")
@@ -48,8 +49,10 @@
                                             c_light.push(deviceLatestResponses[key]);
                                         } else if (key.indexOf('s-light') > -1) {
                                             s_light.push(deviceLatestResponses[key]);
-                                        } else if (key.indexOf('s-elec') > -1) {
+                                        } else if (key.indexOf('s-elec-used') > -1) {
                                             s_elec.push(deviceLatestResponses[key]);
+                                        } else if (key.indexOf('s-elec-gen') > -1) {
+                                            s_elec_gen.push(deviceLatestResponses[key]);
                                         }
                                     }
                             })
@@ -59,6 +62,7 @@
 
                                 var s_temp_labels = [];
                                 var s_temp_statuses = [];
+                                var s_temp_obj_display = {};
 
                                 $scope.show_s_temp_graph = true;
 
@@ -72,16 +76,25 @@
                                 {
                                     s_temp_labels.push(s_temp[i]["device-id"]);
                                     s_temp_statuses.push(parseInt(s_temp[i]["status"]));
+                                    s_temp_obj_display[s_temp[i]["device-id"]] = {"status":parseInt(s_temp[i]["status"])/10};
+                                    if(s_temp_obj_display[s_temp[i]["device-id"]].status > 20)
+                                    {
+                                        s_temp_obj_display[s_temp[i]["device-id"]]["concern"] = "concern";
+                                    }else
+                                    {
+                                        s_temp_obj_display[s_temp[i]["device-id"]]["concern"] = "no_concern";
+                                    }
                                 }
-
                                 $scope.s_temp_series = ['Celsius * 10'];
                                 $scope.s_temp_labels = s_temp_labels;
                                 $scope.s_temp_data = [s_temp_statuses];
+                                $scope.s_temp_obj_display = s_temp_obj_display;
                             })
                             .then(function() {
 
                                 var s_hum_labels = [];
                                 var s_hum_statuses = [];
+                                var s_hum_obj_display = {};
 
                                 $scope.show_s_hum_graph = true;
 
@@ -95,11 +108,20 @@
                                 {
                                     s_hum_labels.push(s_hum[i]["device-id"]);
                                     s_hum_statuses.push(parseInt(s_hum[i]["status"]));
+                                    s_hum_obj_display[s_hum[i]["device-id"]] = {"status":parseInt(s_hum[i]["status"])};
+                                    if(s_hum_obj_display[s_hum[i]["device-id"]].status > 600)
+                                    {
+                                        s_hum_obj_display[s_hum[i]["device-id"]]["concern"] = "concern";
+                                    }else
+                                    {
+                                        s_hum_obj_display[s_hum[i]["device-id"]]["concern"] = "no_concern";
+                                    }
                                 }
 
                                 $scope.s_hum_series = ['Celsius * 10'];
                                 $scope.s_hum_labels = s_hum_labels;
                                 $scope.s_hum_data = [s_hum_statuses];
+                                $scope.s_hum_obj_display = s_hum_obj_display;
                             })
                             .then(function() { //latest-response returns undefined
                                 var s_occ_labels = [];
@@ -194,6 +216,7 @@
                             .then(function() {
                                 var s_elec_labels = [];
                                 var s_elec_statuses = [];
+                                var s_elec_obj_display = {};
 
                                 $scope.show_s_elec_graph = true;
 
@@ -207,12 +230,37 @@
                                 {
                                     s_elec_labels.push(s_elec[i]["device-id"]);
                                     s_elec_statuses.push(parseInt(s_elec[i]["status"]));
+                                    s_elec_obj_display[s_elec[i]["device-id"]] = {"status":parseInt(s_elec[i]["status"])};
+                                    if(s_elec_obj_display[s_elec[i]["device-id"]].status > 1529000000)
+                                    {
+                                        s_elec_obj_display[s_elec[i]["device-id"]]["concern"] = "concern";
+                                    }else
+                                    {
+                                        s_elec_obj_display[s_elec[i]["device-id"]]["concern"] = "no_concern";
+                                    }
                                 }
 
                                 $scope.s_elec_series = ['CUMULATIVE milliwatt-hours'];
                                 $scope.s_elec_labels = s_elec_labels;
                                 $scope.s_elec_data = [s_elec_statuses];
+                                $scope.s_elec_obj_display = s_elec_obj_display;
+                            })
+                            .then(function() {
+                                var s_elec_gen_obj_display = {};
 
+                                for(var i in s_elec_gen)
+                                {
+                                    s_elec_gen_obj_display[s_elec_gen[i]["device-id"]] = {"status":parseInt(s_elec_gen[i]["status"])};
+                                    if(s_elec_gen_obj_display[s_elec_gen[i]["device-id"]].status > 1529000000)
+                                    {
+                                        s_elec_gen_obj_display[s_elec_gen[i]["device-id"]]["concern"] = "concern";
+                                    }else
+                                    {
+                                        s_elec_gen_obj_display[s_elec_gen[i]["device-id"]]["concern"] = "no_concern";
+                                    }
+                                }
+
+                                $scope.s_elec_gen_obj_display = s_elec_gen_obj_display;
                             })
                         }
                     }

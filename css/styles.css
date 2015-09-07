@@ -63,3 +63,15 @@ body
 {
     opacity: 1;
 }
+
+.concern
+{
+    background-color:firebrick;
+    color:white;
+}
+
+.no_concern
+{
+    background-color:lightgreen;
+    color:white;
+}
