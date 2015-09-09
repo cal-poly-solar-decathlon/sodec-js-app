@@ -4,7 +4,7 @@
 (function() {
 
   var HOST = 'calpolysolardecathlon.org';
-  var PORT = 8080;
+  var PORT =  8080;
   // temperature expressed in tenths of degrees:
   var TEMPERATURE_CONCERN_THRESHOLD = 300;
   var HUMIDITY_CONCERN_THRESHOLD = 900;
@@ -21,51 +21,61 @@
   // return the update function to use with this id
   function findUpdateFunction(id){
     if (id.indexOf('s-temp') > -1) {
-      return updateTemperatureDisplay;
+      return updateTemperatureDisplay(id);
     } else if (id.indexOf('s-hum') > -1) {
-      return updateHumidityDisplay;
+      return updateHumidityDisplay(id);
     } else if (id.indexOf('s-elec-used') > -1) {
-      return updateElectricityUsedDisplay;
+      return updateElectricityUsedDisplay(id);
     } else if (id.indexOf('s-elec-gen') > -1) {
-      return updateElectricityGeneratedDisplay;
+      return updateElectricityGeneratedDisplay(id);
     } else {
-      return ignoreData;
+      return ignoreData(id);
     }
   }
 
   // update the display of the given temperature with the given reading
-  function updateTemperatureDisplay(scope,id,reading){
-    scope.s_temp_obj_display[id] = reading/10;
-    scope.s_temp_obj_concern[id] =
-      ((reading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+  function updateTemperatureDisplay(id){
+    return (function (scope,reading){
+      scope.s_temp_obj_display[id] = reading/10;
+      scope.s_temp_obj_concern[id] =
+        ((reading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+    })
   }
 
   // update the display of the given humidity with the given reading
-  function updateHumidityDisplay(scope,id,reading){
-    scope.s_hum_obj_display[id] = reading/10;
-    scope.s_hum_obj_concern[id] =
-      ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+  function updateHumidityDisplay(id){
+    return (function (scope,reading) {
+      scope.s_hum_obj_display[id] = reading/10;
+      scope.s_hum_obj_concern[id] =
+        ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+    })
   }
 
   // update the display of the given electricity usage
-  function updateElectricityUsedDisplay(scope,id,reading){
-    // INCOMPLETE: NEED TO TAKE DIFFERENCE FROM AN HOUR AGO...
-    scope.s_elec_use_obj_display[id] = reading/1000;
-    /*scope.s_hum_obj_concern[id] =
-      ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern"); */
+  function updateElectricityUsedDisplay(id){
+    return (function (scope,reading) {
+      // INCOMPLETE: NEED TO TAKE DIFFERENCE FROM AN HOUR AGO...
+      scope.s_elec_use_obj_display[id] = reading/1000;
+      /*scope.s_hum_obj_concern[id] =
+        ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern"); */
+    })
   }
 
   // update the display of the given electricity generation
-  function updateElectricityGeneratedDisplay(scope,id,reading){
+  function updateElectricityGeneratedDisplay(id){
+    return (function (scope,reading) {
     // INCOMPLETE: NEED TO TAKE DIFFERENCE FROM AN HOUR AGO...
     scope.s_elec_gen_obj_display[id] = reading/1000;
     /*scope.s_hum_obj_concern[id] =
       ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern"); */
+    })
   }
 
   // don't do anything with this data...
   function ignoreData() {
-    // do nothing!
+    return (function () {
+      // do nothing!
+    })
   }
 
   app.controller("SolarHouseController", function($scope, $http) {
@@ -85,12 +95,12 @@
         var deviceList = response.data
         for(var i = 0; i < deviceList.length; i++) {
           var id = response.data[i];
+          var updateFunction = findUpdateFunction(id);
           $http.get(sodecUrl("latest-event","?device="+id))
-            .then((function (id) (function (latestResponse) {
+            .then((function (updateFunction) (function (latestResponse) {
               var reading = parseInt(latestResponse.data);
-              console.log('fetched data for device: '+id+', response is: '+latestResponse.data);
-              (findUpdateFunction(id))($scope,id,reading);
-            }))(id))
+              updateFunction($scope,reading);
+            }))(updateFunction))
         }
       })
   });
