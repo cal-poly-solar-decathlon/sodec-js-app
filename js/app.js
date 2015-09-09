@@ -6,6 +6,16 @@
  * Created by skahal on 8/28/15.
  */
 (function() {
+
+  var HOST = 'calpolysolardecathlon.org';
+  var PORT = 8080;
+
+  // construct a sodec url
+  function sodecUrl(endpoint,queryStr){
+    // I want a way to accept the query as an array and validate it...
+    return "http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr;
+  }
+
     var app = angular.module("SolarHouseApp", ['chart.js']);
     var deviceLatestResponses = {};
     var s_temp = [];
@@ -18,16 +28,15 @@
     var s_elec_gen = [];
 
     app.controller("SolarHouseController", function($scope, $http) {
-        $http.get("http://calpolysolardecathlon.org:8080/srv/list-devices")
+        $http.get(sodecUrl("list-old-device-ids",""))
             .then(function(response) {
                 console.log("list of devices");
                 console.log(response);
                 $scope.device_list = response.data;
-                var dataArray = response.data;
-                for(var i = 0; i < dataArray.length; i++) {
-                    if(dataArray[i].device !== "s-elec-used-vehicle-changing-recep" && dataArray[i].device !== "s-temp-bogus" && dataArray[i].device !== "s-temp-testing-blackhole")
+                for(var i = 0; i < response.data.length; i++) {
+                    if(response.data[i] !== "s-elec-used-vehicle-changing-recep" && response.data[i] !== "s-temp-bogus" && response.data[i] !== "s-temp-testing-blackhole")
                     {
-                        $http.get("http://calpolysolardecathlon.org:8080/srv/latest-event?device=" + dataArray[i].device)
+                        $http.get("http://calpolysolardecathlon.org:8080/srv/latest-event?device=" + response.data[i])
                             .then(function (latestResponse) {
 
                                 deviceLatestResponses[latestResponse.data["device-id"]] = latestResponse.data;
