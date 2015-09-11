@@ -20,13 +20,13 @@
 
   // return the update function to use with this id
   function findUpdateFunction(id){
-    if (id.indexOf('s-temp') > -1) {
+    if (id.indexOf('s-temp') === 0) {
       return updateTemperatureDisplay(id);
-    } else if (id.indexOf('s-hum') > -1) {
+    } else if (id.indexOf('s-hum') === 0) {
       return updateHumidityDisplay(id);
-    } else if (id.indexOf('s-elec-used') > -1) {
+    } else if (id.indexOf('s-elec-used') === 0) {
       return updateElectricityUsedDisplay(id);
-    } else if (id.indexOf('s-elec-gen') > -1) {
+    } else if (id.indexOf('s-elec-gen') === 0) {
       return updateElectricityGeneratedDisplay(id);
     } else {
       return ignoreData(id);
