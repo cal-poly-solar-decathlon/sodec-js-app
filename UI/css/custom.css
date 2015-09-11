@@ -1,0 +1,42 @@
+.navbar-inverse {
+    background-color: rgb(86,137,53);
+    border-color: #080808;
+    height:80px;
+}
+
+.navbar-inverse .navbar-brand
+{
+    color: rgb(251,176,64);
+    font-family: Bebas Neue Regular;
+    font-size: 3em;
+    line-height: 1em;
+
+}
+
+#welcomeMenuItem
+{
+    color: rgb(251,176,64);
+    font-family: Bebas Neue Regular;
+}
+
+.productionSubSection
+{
+    padding-left:30px;
+}
+
+.productionSubSection h3
+{
+    color: rgb(251,176,64);
+    font-family: Bebas Neue Regular;
+}
+
+.productionSection h2
+{
+    color: rgb(251,176,64);
+    font-family: Bebas Neue Regular;
+}
+
+body
+{
+    background-color:rgb(227,232,235);
+}
