@@ -9,6 +9,7 @@
   var TEMPERATURE_CONCERN_THRESHOLD = 300;
   var HUMIDITY_CONCERN_THRESHOLD = 900;
 
+  // these are the temperature and humidity devices
   var TEMP_HUM_DEVICES = [
       "living_room",
       "bedroom",
@@ -16,6 +17,7 @@
       "outside",
       "bathroom"];
 
+  // these are the electric power devices
   var ELECTRIC_POWER_DEVICES = [
     "laundry",
     "dishwasher",
@@ -44,18 +46,21 @@
     "main_solar_array",
     "bifacial_solar_array"];
 
+  // this table maps measurement name (e.g. 'temperature') to the devices that
+  // belong to that measurement
   var DEVICE_TABLE = {
     temperature : TEMP_HUM_DEVICES,
     humidity : TEMP_HUM_DEVICES,
     electric_power : ELECTRIC_POWER_DEVICES
   };
 
+  // this table maps measurement names to the corresponding update functions
   var UPDATE_FN_TABLE = {
     temperature : updateTemperatureDisplay,
     humidity : updateHumidityDisplay,
     electric_power : updateElectricPowerDisplay
   };
-  
+
   // construct a sodec url
   function sodecUrl(endpoint,queryStr){
     // I want a way to accept the query as an array and validate it...
@@ -63,22 +68,6 @@
   }
 
   var app = angular.module("SolarHouseApp", ['chart.js']);
-  var deviceLatestResponses = {};
-
-/*  // return the update function to use with this id
-  function findUpdateFunction(id){
-    if (id.indexOf('s-temp') === 0) {
-      return updateTemperatureDisplay(id);
-    } else if (id.indexOf('s-hum') === 0) {
-      return updateHumidityDisplay(id);
-    } else if (id.indexOf('s-elec-used') === 0) {
-      return updateElectricityUsedDisplay(id);
-    } else if (id.indexOf('s-elec-gen') === 0) {
-      return updateElectricityGeneratedDisplay(id);
-    } else {
-      return ignoreData(id);
-    }
-  }*/
 
   // update the display of the given temperature with the given reading
   function updateTemperatureDisplay(scope,id,reading){
