@@ -61,6 +61,36 @@
     electric_power : updateElectricPowerDisplay
   };
 
+  /* messing around with fully dynamic generation of rows. Ignore for now...
+  var electric_titles = ELECTRIC_POWER_DEVICES.map(deviceToTitle);
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  // map a device name such as "heat_pump" to a
+  // record containing the device and a title such as "Heat Pump"
+  function deviceToTitle(device){
+    var words = device.split(/_/);
+    var upcasewords = words.map(capitalizeFirstLetter)
+    return {device:device,title:upcasewords.join(" ")};
+
+  }
+
+  var ROW_LEN = 9;
+
+  var t1 = [];
+  var t2 = []
+  for(i=0;i < ROW_LEN; i++) {
+    t1.push('<th class="text-center">'+electric_titles[i].title+'</th>');
+    t2.push()
+  }
+  $('#electric-titles-1').append(t1.join('\n'));
+
+  //var l1 = $('#electric-readings-1');
+  //l1.html('WHEE')
+*/
+
   // construct a sodec url
   function sodecUrl(endpoint,queryStr){
     // I want a way to accept the query as an array and validate it...
@@ -96,18 +126,11 @@
   // update the display of the given electricity usage
   function updateElectricPowerDisplay(scope,id,reading){
     // INCOMPLETE: NEED TO TAKE DIFFERENCE FROM AN HOUR AGO...
-    scope.s_elec_use_obj_display[id] = reading/1000;
+    scope.s_elec_obj_display[id] = parseInt(reading);
     /*scope.s_hum_obj_concern[id] =
       ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern"); */
   }
 
-
-  // don't do anything with this data...
-  function ignoreData() {
-    return (function () {
-      // do nothing!
-    })
-  }
 
   // update all sensors associated with a measurement
   function updateAll(scope,http,measurement){
@@ -128,13 +151,12 @@
     $scope.s_temp_obj_concern = [];
     $scope.s_hum_obj_display = [];
     $scope.s_hum_obj_concern = [];
-    $scope.s_elec_use_obj_display = [];
-    $scope.s_elec_use_obj_concern = [];
-    $scope.s_elec_gen_obj_display = [];
-    $scope.s_elec_gen_obj_concern = [];
+    $scope.s_elec_obj_display = [];
+    $scope.s_elec_obj_concern = [];
 
     updateAll($scope,$http,'temperature');
     updateAll($scope,$http,'humidity');
+    updateAll($scope,$http,'electric_power');
 
   });
 })
