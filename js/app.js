@@ -6,7 +6,7 @@
   var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
   // temperature expressed in degrees:
-  var TEMPERATURE_CONCERN_THRESHOLD = 10.0;
+  var TEMPERATURE_CONCERN_THRESHOLD = 20.0;
   var HUMIDITY_CONCERN_THRESHOLD = 90.0;
   var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
 
@@ -170,15 +170,15 @@
   // update all sensors associated with a measurement using instantaneous
   // reading. NOT FOR USE WITH ELECTRIC POWER; these readings are cumulative
   // watt-seconds.
-  function updateAll(scope,http,measurement){
+  function updateSome(scope,http,measurement){
     var deviceList = DEVICE_TABLE[measurement];
     var updateFn = UPDATE_FN_TABLE[measurement];
     for (var i = 0; i < deviceList.length; i++) {
       var id = deviceList[i];
       http.get(sodecUrl("latest-event","?measurement="+measurement+"&device="+id))
-        .then((function (id) (function(latestResponse){
+        .then((function(id,latestResponse){
           updateFn(scope,id,latestResponse.data);
-        }))(id))
+        }).bind(undefined,id))
     }
   }
 
@@ -195,6 +195,12 @@
     })
   }
 
+  // update all of the page
+  function updatePage($scope,$http){
+    updateSome($scope,$http,'temperature');
+    updateSome($scope,$http,'humidity');
+    updateAllElectric($scope,$http);
+  }
 
   app.controller("SolarHouseController", function($scope, $http) {
     $scope.s_temp_obj_display = [];
@@ -204,10 +210,14 @@
     $scope.elec_display = [];
     $scope.elec_concern = [];
 
-    updateAll($scope,$http,'temperature');
-    updateAll($scope,$http,'humidity');
-    updateAllElectric($scope,$http);
+    // update everything every fifteen seconds...
+    var updater = updatePage.bind(undefined,$scope,$http);
+    updater()
+    setInterval(updater, 15000);
 
+    /* SODECFORECAST.fetchForecast($http,function(forecast) {
+      console.log(forecast);
+    })*/
   });
 })
 ();
