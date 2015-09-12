@@ -5,9 +5,10 @@
 
   var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
-  // temperature expressed in tenths of degrees:
-  var TEMPERATURE_CONCERN_THRESHOLD = 300;
-  var HUMIDITY_CONCERN_THRESHOLD = 900;
+  // temperature expressed in degrees:
+  var TEMPERATURE_CONCERN_THRESHOLD = 10.0;
+  var HUMIDITY_CONCERN_THRESHOLD = 90.0;
+  var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
 
   // these are the temperature and humidity devices
   var TEMP_HUM_DEVICES = [
@@ -42,7 +43,9 @@
     "water_supply_booster_pump",
     "vehicle_charging",
     "heat_pump",
-    "air_handler",
+    "air_handler"];
+
+  var ELECTRIC_POWER_GENERATION_DEVICES = [
     "main_solar_array",
     "bifacial_solar_array"];
 
@@ -51,15 +54,15 @@
   var DEVICE_TABLE = {
     temperature : TEMP_HUM_DEVICES,
     humidity : TEMP_HUM_DEVICES,
-    electric_power : ELECTRIC_POWER_DEVICES
   };
 
   // this table maps measurement names to the corresponding update functions
   var UPDATE_FN_TABLE = {
     temperature : updateTemperatureDisplay,
     humidity : updateHumidityDisplay,
-    electric_power : updateElectricPowerDisplay
   };
+
+  var app = angular.module("SolarHouseApp", ['chart.js']);
 
   /* messing around with fully dynamic generation of rows. Ignore for now...
   var electric_titles = ELECTRIC_POWER_DEVICES.map(deviceToTitle);
@@ -97,7 +100,33 @@
     return "http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr;
   }
 
-  var app = angular.module("SolarHouseApp", ['chart.js']);
+  // readings older than 5 minutes really shouldn't be displayed
+  // as current
+  var SOMEWHAT_CURRENT = (5 * 60);
+
+  // compute the "instantaneous" power use of a device
+  // returns a number representing average watts or "no events"
+  function electricUse(scope,http,device,isGeneration) {
+    http.get(sodecUrl("timestamp",""))
+      .then(function(timestampResponse){
+        var ts = timestampResponse.data.timestamp;
+        var ts5 = ts - SOMEWHAT_CURRENT;
+        http.get(sodecUrl("events-in-range","?measurement=electric_power&device="
+                          +device+"&start="+ts5+"&end="+ts))
+          .then(function(eventsResponse) {
+            var events = eventsResponse.data;
+            if (events.length < 2) {
+              return "no events";
+            } else {
+              var lastIdx = events.length - 1;
+              var readingDiff = (events[lastIdx].r - events[lastIdx-1].r);
+              var timeDiff = (events[lastIdx].t - events[lastIdx-1].t) / 1000.0;
+              var instWatts = (readingDiff / timeDiff);
+              updateElectricPowerDisplay(scope,device,instWatts,isGeneration);
+            }
+          })
+      })
+  }
 
   // update the display of the given temperature with the given reading
   function updateTemperatureDisplay(scope,id,reading){
@@ -105,9 +134,10 @@
       scope.s_temp_obj_display[id] = "n/a";
       scope.s_temp_obj_concern[id] = "no_concern";
     } else {
-      scope.s_temp_obj_display[id] = parseInt(reading)/10;
+      var numReading = parseInt(reading)/10
+      scope.s_temp_obj_display[id] = numReading;
       scope.s_temp_obj_concern[id] =
-        ((reading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+        ((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
     }
   }
 
@@ -117,22 +147,29 @@
       scope.s_hum_obj_display[id] = "n/a";
       scope.s_hum_obj_concern[id] = "no_concern";
     } else {
-      scope.s_hum_obj_display[id] = parseInt(reading)/10;
+      var numReading = parseInt(reading)/10
+      scope.s_hum_obj_display[id] = numReading;
       scope.s_hum_obj_concern[id] =
-        ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+        ((numReading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern");
     }
   }
 
-  // update the display of the given electricity usage
-  function updateElectricPowerDisplay(scope,id,reading){
-    // INCOMPLETE: NEED TO TAKE DIFFERENCE FROM AN HOUR AGO...
-    scope.s_elec_obj_display[id] = parseInt(reading);
-    /*scope.s_hum_obj_concern[id] =
-      ((reading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern"); */
+  // update the display of the given electricity usage given a reading *as a number*
+  function updateElectricPowerDisplay(scope,id,reading,isGeneration){
+    var roundedReading = Math.round(reading * 10) / 10;
+    scope.elec_display[id] = roundedReading;
+    if (isGeneration) {
+      scope.elec_concern[id] = "no_concern";
+    } else {
+    scope.elec_concern[id] =
+      ((reading > ELECTRIC_USE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+    }
   }
 
 
-  // update all sensors associated with a measurement
+  // update all sensors associated with a measurement using instantaneous
+  // reading. NOT FOR USE WITH ELECTRIC POWER; these readings are cumulative
+  // watt-seconds.
   function updateAll(scope,http,measurement){
     var deviceList = DEVICE_TABLE[measurement];
     var updateFn = UPDATE_FN_TABLE[measurement];
@@ -143,20 +180,33 @@
           updateFn(scope,id,latestResponse.data);
         }))(id))
     }
-
   }
+
+  // update all electric sensors. For these, we need to take the "derivative"
+  // (actually just the difference in the last two readings / time-diff
+  function updateAllElectric(scope,http) {
+    var deviceList = ELECTRIC_POWER_DEVICES;
+    deviceList.map(function(device) {
+      electricUse(scope,http,device,false);
+    })
+    var deviceListGen = ELECTRIC_POWER_GENERATION_DEVICES;
+    deviceListGen.map(function(device) {
+      electricUse(scope,http,device,true);
+    })
+  }
+
 
   app.controller("SolarHouseController", function($scope, $http) {
     $scope.s_temp_obj_display = [];
     $scope.s_temp_obj_concern = [];
     $scope.s_hum_obj_display = [];
     $scope.s_hum_obj_concern = [];
-    $scope.s_elec_obj_display = [];
-    $scope.s_elec_obj_concern = [];
+    $scope.elec_display = [];
+    $scope.elec_concern = [];
 
     updateAll($scope,$http,'temperature');
     updateAll($scope,$http,'humidity');
-    updateAll($scope,$http,'electric_power');
+    updateAllElectric($scope,$http);
 
   });
 })

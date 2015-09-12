@@ -105,7 +105,8 @@
                     <tbody>
                     <tr>
                         <td><strong>Temperature</strong></td>
-                        <td class="well" ng-class="s_temp_obj_concern['outside']"
+                        <td class="well"
+                            ng-class="s_temp_obj_concern['outside']"
                             >{{s_temp_obj_display['outside']}}</td>
                         <td class="well" ng-class="s_temp_obj_concern['bedroom']"
                             >{{s_temp_obj_display['bedroom']}}</td>
@@ -153,24 +154,24 @@
                     </thead>
                     <tbody>
                       <tr id="electric-readings-1">
-                        <td class="well" ng-class="s_elec_obj_concern['laundry']"
-                            >{{s_elec_obj_display['laundry']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['dishwasher']"
-                            >{{s_elec_obj_display['dishwasher']}}</td>
-                        <td class="well" ng-class="s_el_ec_use_obj_concern['refrigerator']"
-                            >{{s_elec_obj_display['refrigerator']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['induction_stove']"
-                            >{{s_elec_obj_display['induction_stove']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['water_heater']"
-                            >{{s_elec_obj_display['water_heater']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['kitchen_outlets_1']"
-                            >{{s_elec_obj_display['kitchen_outlets_1']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['kitchen_outlets_2']"
-                            >{{s_elec_obj_display['kitchen_outlets_2']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['living_outlets']"
-                            >{{s_elec_obj_display['living_outlets']}}</td>
-                        <td class="well" ng-class="s_elec_obj_concern['air_handler_recep']"
-                            >{{s_elec_obj_display['air_handler_recep']}}</td>
+                        <td class="well" ng-class="elec_concern['laundry']"
+                            >{{elec_display['laundry']}}</td>
+                        <td class="well" ng-class="elec_concern['dishwasher']"
+                            >{{elec_display['dishwasher']}}</td>
+                        <td class="well" ng-class="elec_concern['refrigerator']"
+                            >{{elec_display['refrigerator']}}</td>
+                        <td class="well" ng-class="elec_concern['induction_stove']"
+                            >{{elec_display['induction_stove']}}</td>
+                        <td class="well" ng-class="elec_concern['water_heater']"
+                            >{{elec_display['water_heater']}}</td>
+                        <td class="well" ng-class="elec_concern['kitchen_outlets_1']"
+                            >{{elec_display['kitchen_outlets_1']}}</td>
+                        <td class="well" ng-class="elec_concern['kitchen_outlets_2']"
+                            >{{elec_display['kitchen_outlets_2']}}</td>
+                        <td class="well" ng-class="elec_concern['living_outlets']"
+                            >{{elec_display['living_outlets']}}</td>
+                        <td class="well" ng-class="elec_concern['air_handler_recep']"
+                            >{{elec_display['air_handler_recep']}}</td>
                     </tr>
                     <thead>
                     <tr>
@@ -187,32 +188,32 @@
                     </thead>
                     <tr>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['dining_outlets_1']"
-                            >{{s_elec_obj_display['dining_outlets_1']}}</td>
+                            ng-class="elec_concern['dining_outlets_1']"
+                            >{{elec_display['dining_outlets_1']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['dining_outlets_2']"
-                            >{{s_elec_obj_display['dining_outlets_2']}}</td>
+                            ng-class="elec_concern['dining_outlets_2']"
+                            >{{elec_display['dining_outlets_2']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['bathroom_outlets']"
-                            >{{s_elec_obj_display['bathroom_outlets']}}</td>
+                            ng-class="elec_concern['bathroom_outlets']"
+                            >{{elec_display['bathroom_outlets']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['bedroom_outlets_1']"
-                            >{{s_elec_obj_display['bedroom_outlets_1']}}</td>
+                            ng-class="elec_concern['bedroom_outlets_1']"
+                            >{{elec_display['bedroom_outlets_1']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['bedroom_outlets_2']"
-                            >{{s_elec_obj_display['bedroom_outlets_2']}}</td>
+                            ng-class="elec_concern['bedroom_outlets_2']"
+                            >{{elec_display['bedroom_outlets_2']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['mechanical_outlets']"
-                            >{{s_elec_obj_display['mechanical_outlets']}}</td>
+                            ng-class="elec_concern['mechanical_outlets']"
+                            >{{elec_display['mechanical_outlets']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['entry_outlets']"
-                            >{{s_elec_obj_display['entry_outlets']}}</td>
+                            ng-class="elec_concern['entry_outlets']"
+                            >{{elec_display['entry_outlets']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['exterior_outlets']"
-                            >{{s_elec_obj_display['exterior_outlets']}}</td>
+                            ng-class="elec_concern['exterior_outlets']"
+                            >{{elec_display['exterior_outlets']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['heat_pump_recep']"
-                            >{{s_elec_obj_display['heat_pump_recep']}}</td>
+                            ng-class="elec_concern['heat_pump_recep']"
+                            >{{elec_display['heat_pump_recep']}}</td>
                     </tr>
                     <thead>
                     <tr>
@@ -226,23 +227,23 @@
                     </thead>
                     <tr>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['grey_water_pump_recep']"
-                            >{{s_elec_obj_display['grey_water_pump_recep']}}</td>
+                            ng-class="elec_concern['grey_water_pump_recep']"
+                            >{{elec_display['grey_water_pump_recep']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['black_water_pump_recep']"
-                            >{{s_elec_obj_display['black_water_pump_recep']}}</td>
+                            ng-class="elec_concern['black_water_pump_recep']"
+                            >{{elec_display['black_water_pump_recep']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['thermal_loop_pump_recep']"
-                            >{{s_elec_obj_display['thermal_loop_pump_recep']}}</td>
+                            ng-class="elec_concern['thermal_loop_pump_recep']"
+                            >{{elec_display['thermal_loop_pump_recep']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['water_supply_pump_recep']"
-                            >{{s_elec_obj_display['water_supply_pump_recep']}}</td>
+                            ng-class="elec_concern['water_supply_pump_recep']"
+                            >{{elec_display['water_supply_pump_recep']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['water_supply_booster_pump_recep']"
-                            >{{s_elec_obj_display['water_supply_booster_pump_recep']}}</td>
+                            ng-class="elec_concern['water_supply_booster_pump_recep']"
+                            >{{elec_display['water_supply_booster_pump_recep']}}</td>
                         <td class="well"
-                            ng-class="s_elec_obj_concern['vehicle_charging_recep']"
-                            >{{s_elec_obj_display['vehicle_charging_recep']}}</td>
+                            ng-class="elec_concern['vehicle_charging_recep']"
+                            >{{elec_display['vehicle_charging_recep']}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -261,8 +262,10 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td class="well" ng-class="s_elec_gen_obj_concern['s-elec-gen-main-array']">{{s_elec_gen_obj_display['s-elec-gen-main-array']}}</td>
-                        <td class="well" ng-class="s_elec_gen_obj_concern['s-elec-gen-bifacial']">{{s_elec_gen_obj_display['s-elec-gen-bifacial']}}</td>
+                        <td class="well" ng-class="elec_concern['main_solar_array']"
+                            >{{elec_display['main_solar_array']}}</td>
+                        <td class="well" ng-class="elec_concern['bifacial_solar_array']"
+                            >{{elec_display['bifacial_solar_array']}}</td>
                     </tr>
                     </tbody>
                 </table>
