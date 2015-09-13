@@ -45,7 +45,7 @@
   ]));
 
   gulp.task('unit', shell.task([
-    './node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec test/index.html -k mocha-phantomjs-istanbul'
+    './node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec test/energyUse.html -k mocha-phantomjs-istanbul'
   ]));
 
   gulp.task('integration', function () {

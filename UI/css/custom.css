@@ -1,13 +1,39 @@
+body
+{
+    margin: 0;
+    background-color:rgb(227,232,235);
+    font-family: Avenir Book;
+
+}
+
 .navbar-inverse {
     background-color: rgb(86,137,53);
     border-color: #080808;
     height:80px;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    font-family: Bebas Neue Regular;
+}
+
 .navbar-inverse .navbar-brand
 {
     color: rgb(251,176,64);
-    font-family: Bebas Neue Regular;
     font-size: 3em;
     line-height: 1em;
 
@@ -16,7 +42,6 @@
 #welcomeMenuItem
 {
     color: rgb(251,176,64);
-    font-family: Bebas Neue Regular;
 }
 
 .productionSubSection
@@ -27,16 +52,79 @@
 .productionSubSection h3
 {
     color: rgb(251,176,64);
-    font-family: Bebas Neue Regular;
 }
 
 .productionSection h2
 {
     color: rgb(251,176,64);
-    font-family: Bebas Neue Regular;
 }
 
-body
+.productionSection p
 {
-    background-color:rgb(227,232,235);
+    font-size:16px;
+    font-weight:bold;
 }
+
+.tempAndHumSection h2
+{
+    color: rgb(251,176,64);
+}
+
+.tempAndHumSection p
+{
+    font-size:16px;
+    font-weight:bold;
+}
+
+.tempAndHumSubSection
+{
+    padding-left:30px;
+}
+
+.tempAndHumSubSection h3
+{
+    color: rgb(251,176,64);
+}
+
+#tempAndHumHeader h3, #tempAndHumHeader h2
+{
+    color: rgb(251,176,64);
+    display:inline;
+}
+
+#tempAndHumHeader h2
+{
+    padding-right:25px;
+}
+
+.subMenu li a
+{
+    display:inline;
+    border: 3px solid rgb(170, 175, 175);
+    padding: 3px 15px;
+    font-size:20px;
+    color: rgb(251,176,64);
+}
+
+li
+{
+    display:inline;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    background-color: rgb(86, 137, 53);
+}
+
+a:active {
+    text-decoration: underline;
+}
+
