@@ -100,6 +100,15 @@
     return "http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr;
   }
 
+  function getForecast($http) {
+    $http.get(sodecUrl("latest-forecast",""))
+      .then (function (forecastResponse) {
+        var forecast = forecastResponse.data;
+        var timestamp = forecast.timestamp;
+        $('#insights').html('stomp stomp stomp');
+      })
+  }
+
   // readings older than 5 minutes really shouldn't be displayed
   // as current
   var SOMEWHAT_CURRENT = (5 * 60);
@@ -215,6 +224,7 @@
     updater()
     setInterval(updater, 15000);
 
+    getForecast($http)
     /* SODECFORECAST.fetchForecast($http,function(forecast) {
       console.log(forecast);
     })*/
