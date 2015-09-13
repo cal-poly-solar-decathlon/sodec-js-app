@@ -3,7 +3,6 @@ body
     margin: 0;
     background-color:rgb(227,232,235);
     font-family: Avenir Book;
-
 }
 
 .navbar-inverse {
@@ -24,11 +23,11 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-family: inherit;
     font-weight: 500;
     line-height: 1.1;
     color: inherit;
     font-family: Bebas Neue Regular;
+    color: rgb(251,176,64);
 }
 
 .navbar-inverse .navbar-brand
@@ -97,6 +96,11 @@ h6,
     padding-right:25px;
 }
 
+.subMenu li
+{
+    display:inline;
+}
+
 .subMenu li a
 {
     display:inline;
@@ -106,25 +110,76 @@ h6,
     color: rgb(251,176,64);
 }
 
-li
+a:link
 {
-    display:inline;
-}
-
-a:link {
     text-decoration: none;
 }
 
-a:visited {
+a:visited
+{
     text-decoration: none;
 }
 
-a:hover {
+a:hover
+{
     text-decoration: none;
     background-color: rgb(86, 137, 53);
 }
 
-a:active {
+a:active
+{
     text-decoration: underline;
 }
 
+#energyInsightSubsection, #waterInsightSubsection
+{
+    padding-left:30px;
+}
+
+#energyInsightSubsection p, #waterInsightSubsection p
+{
+    font-size:16px;
+    font-weight:bold;
+}
+
+.homepageDataTable
+{
+    margin-top:25px;
+}
+
+.homepageDataTable th, td
+{
+    border: 3px solid rgb(170, 175, 175);
+    padding:2px 37px;
+    font-size:20px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.homepageDataTable td
+{
+    color: rgb(251,176,64);
+}
+
+.insights, #temperatureSection, #humiditySection, #energyUseSection, #energyProductionSection
+{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.insights .well
+{
+    border: 3px solid rgb(170, 175, 175);
+}
+
+span
+{
+    display:inline;
+}
+
+.tableHeader
+{
+    color: rgb(251,176,64);
+    font-weight:bold;
+    font-size:20px;
+}
