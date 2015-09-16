@@ -183,3 +183,12 @@ span
     font-weight:bold;
     font-size:20px;
 }
+
+.homepageDataTable .concern
+{
+    color:firebrick;
+}
+
+.no_concern
+{
+}
