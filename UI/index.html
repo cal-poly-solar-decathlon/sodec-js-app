@@ -13,12 +13,10 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#"><h1>INHouse</h1></a>
+                <a class="pull-left"><h1>INHouse</h1></a>
             </div>
             <div>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" id="welcomeMenuItem"><h2>Welcome!</h2></a></li>
-                </ul>
+                <h1 class="pull-right">Welcome!</h1>
             </div>
         </div>
     </nav>
@@ -53,7 +51,7 @@
             </div>
             <div class="col-md-10">
                 <div class="homepageDataTable">
-                    <div class="tableHeader">TEMPERATURE<div class="pull-right">FAHRENHEIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CELSIUS</div></div>
+                    <div class="tableHeader">TEMPERATURE<div class="pull-right tempSettings">FAHRENHEIT&nbsp;&nbsp;CELSIUS</div></div>
                     <table>
                         <tr>
                             <th>OUTSIDE</th>
@@ -86,7 +84,7 @@
                 <img src="./images/humidity150X150.png">
             </div>
             <div class="col-md-10">
-                <div class="homepageDataTable">
+                <div class="homepageDataTable" id="humidityDataTable">
                     <div class="tableHeader">HUMIDITY</div>
                     <table>
                         <tr>
@@ -120,7 +118,7 @@
                 <img src="./images/energyUse150X150.png">
             </div>
             <div class="col-md-10">
-                <div class="homepageDataTable">
+                <div class="homepageDataTable" id="energyUseDataTable">
                     <div class="tableHeader">ENERGY USE</div>
                     <table>
                         <tr>
@@ -149,7 +147,7 @@
                 <img src="./images/energyProduction150X180.png">
             </div>
             <div class="col-md-10">
-                <div class="homepageDataTable">
+                <div class="homepageDataTable" id="energyProductionTable">
                     <div class="tableHeader">ENERGY PRODUCTION</div>
                     <table>
                         <tr>
@@ -177,6 +175,8 @@
             </div>
         </div>
     </div>
+    <br/>
+    <br/>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

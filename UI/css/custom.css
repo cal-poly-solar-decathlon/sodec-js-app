@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Avenir Book;
+    src: url(../fonts/AvenirLTStd-Medium.otf);
+}
+
 body
 {
     margin: 0;
@@ -6,9 +11,10 @@ body
 }
 
 .navbar-inverse {
-    background-color: rgb(86,137,53);
-    border-color: #080808;
+    background-color: rgb(0,78,56);
+    border-color: rgb(0,78,56);
     height:80px;
+    border-radius:0;
 }
 
 h1,
@@ -26,7 +32,6 @@ h6,
     font-weight: 500;
     line-height: 1.1;
     color: inherit;
-    font-family: Bebas Neue Regular;
     color: rgb(251,176,64);
 }
 
@@ -96,6 +101,11 @@ h6,
     padding-right:25px;
 }
 
+.tempSettings
+{
+    padding-right:25px;
+}
+
 .subMenu li
 {
     display:inline;
@@ -144,7 +154,7 @@ a:active
 
 .homepageDataTable
 {
-    margin-top:25px;
+    margin-top:28px;
 }
 
 .homepageDataTable th, td
@@ -159,6 +169,21 @@ a:active
 .homepageDataTable td
 {
     color: rgb(251,176,64);
+}
+
+#humidityDataTable
+{
+    margin-top:17px;
+}
+
+#energyUseDataTable
+{
+    margin-top:17px;
+}
+
+#energyProductionTable
+{
+    margin-top:5px;
 }
 
 .insights, #temperatureSection, #humiditySection, #energyUseSection, #energyProductionSection
