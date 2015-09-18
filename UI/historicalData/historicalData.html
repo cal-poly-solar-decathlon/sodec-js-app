@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SolarHouseHistoricalDataApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/custom.css">
+</head>
+<body ng-controller="viewController">
+
+<div class="container">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <h1 class="pull-left">Sensor Historical Data</h1>
+            </div>
+        </div>
+    </nav>
+    <br/>
+    <div class="row col-md-12 insights">
+        <div class="well">
+            <h2>INSIGHTS</h2>
+            <div class="insightSubsection">
+                <h3>TEMPERATURE</h3>
+                <p>
+                    It's been quite warm lately:
+                    <ul>
+                        <li>Drink some ice cold lemonade.</li>
+                    </ul>
+                </p>
+                <h3>REMAINDER OF SENSORS</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">Select Sensor
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a ng-click="setRoute('tempHistory')">Temperature</a></li>
+            <li><a ng-click="setRoute('humHistory')">Humidity</a></li>
+            <li><a ng-click="setRoute('elecUseHistory')">Electricity Use</a></li>
+            <li><a ng-click="setRoute('lightLevelHistory')">Light Level</a></li>
+            <li><a ng-click="setRoute('occHistory')">Occupied</a></li>
+        </ul>
+    </div>
+
+    <br/>
+    <br/>
+    <div ng-view></div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/Chart.min.js"></script>
+<script src="../js/angular-chart.min.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/historicalDataApp.js"></script>
+</body>
+</html>
