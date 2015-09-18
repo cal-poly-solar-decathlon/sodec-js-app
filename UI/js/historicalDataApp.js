@@ -9,7 +9,7 @@ angular.module("SolarHouseHistoricalDataApp", ['ngRoute'])
             .when('/elecUseHistory', {templateUrl:'../partials/elecUseHistory.html'})
             .when('/lightLevelHistory', {templateUrl:'../partials/lightLevelHistory.html'})
             .when('/occHistory', {templateUrl:'../partials/occHistory.html'})
-            .otherwise({redirectTo:'/historicalData', templateUrl:'..partials/home.html'})
+            .otherwise({redirectTo:'/home', templateUrl:'..partials/home.html'})
     })
     .controller('viewController', ['$scope', '$location', function($scope, $location) {
         $scope.setRoute = function(route){
