@@ -146,22 +146,17 @@ a:active
     padding-left:30px;
 }
 
-.insightSubsection p
+.insightSubsection div
 {
     font-size:16px;
     font-weight:bold;
 }
 
-#energyInsightSubsection, #waterInsightSubsection
+.highPriority
 {
-    padding-left:30px;
+  color: rgb(255,0,0);
 }
 
-#energyInsightSubsection p, #waterInsightSubsection p
-{
-    font-size:16px;
-    font-weight:bold;
-}
 
 .homepageDataTable
 {
