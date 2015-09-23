@@ -260,3 +260,8 @@ span
     color: rgb(251,176,64);
     background-color: rgb(0,78,56);
 }
+
+.yearDropDown
+{
+    padding-right:10px;
+}
