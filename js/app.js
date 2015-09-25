@@ -6,8 +6,8 @@
   var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
   // temperature expressed in degrees:
-  var TEMPERATURE_CONCERN_THRESHOLD = 20.0;
-  var HUMIDITY_CONCERN_THRESHOLD = 90.0;
+  var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
+  var HUMIDITY_CONCERN_THRESHOLD = 50.0;
   var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
 
   // these are the temperature and humidity devices
@@ -19,6 +19,7 @@
       "bathroom"];
 
   // these are the electric power devices
+  // ... actually, no they're not.
   var ELECTRIC_POWER_DEVICES = [
     "laundry",
     "dishwasher",
@@ -116,6 +117,7 @@
   // compute the "instantaneous" power use of a device
   // returns a number representing average watts or "no events"
   function electricUse(scope,http,device,isGeneration) {
+    // silly to fetch this over and over again...
     http.get(sodecUrl("timestamp",""))
       .then(function(timestampResponse){
         var ts = timestampResponse.data.timestamp;
@@ -204,11 +206,30 @@
     })
   }
 
+  // update the insights section
+  function updateInsights($http) {
+    $http.get(sodecUrl("latest-insights",""))
+      .then (function(response){
+        var insights = response.data;
+        var insightItems = insights.map(renderInsightText)
+        $("#comfortInsights").html("<ul>"+insightItems.join("\n")+"</ul>");
+      })
+  }
+  
+  // render an insight using red if it's priority 50 or higher
+  function renderInsightText(insight) {
+    var text = (insight.p > 50
+               ? ("<span class='highPriority'>"+insight.m+"</span>")
+               : (insight.m))
+    return "<li>"+text+"</li>";
+  }
+
   // update all of the page
   function updatePage($scope,$http){
     updateSome($scope,$http,'temperature');
     updateSome($scope,$http,'humidity');
     updateAllElectric($scope,$http);
+    updateInsights($http);
   }
 
   app.controller("SolarHouseController", function($scope, $http) {
@@ -221,10 +242,9 @@
 
     // update everything every fifteen seconds...
     var updater = updatePage.bind(undefined,$scope,$http);
-    updater()
+    updater();
     setInterval(updater, 15000);
 
-    getForecast($http)
     /* SODECFORECAST.fetchForecast($http,function(forecast) {
       console.log(forecast);
     })*/
