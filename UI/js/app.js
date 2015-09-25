@@ -6,8 +6,8 @@
   var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
   // temperature expressed in degrees:
-  var TEMPERATURE_CONCERN_THRESHOLD = 20.0;
-  var HUMIDITY_CONCERN_THRESHOLD = 90.0;
+  var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
+  var HUMIDITY_CONCERN_THRESHOLD = 50.0;
   var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
 
   // these are the temperature and humidity devices
