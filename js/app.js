@@ -3,12 +3,18 @@
  */
 (function() {
 
+  // I think all of this code is massively cavalier in its handling
+  // of responses to the HTTP requests that it makes.
+  
   var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
   // temperature expressed in degrees:
   var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
   var HUMIDITY_CONCERN_THRESHOLD = 50.0;
   var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
+
+  var SECONDS_IN_DAY = 86400;
+  var SECONDS_IN_HOUR = 3600;
 
   // these are the temperature and humidity devices
   var TEMP_HUM_DEVICES = [
@@ -96,13 +102,23 @@
 */
 
   // construct a sodec url
-  function sodecUrl(endpoint,queryStr){
+  function sodecUrl(endpoint,queryArr){
     // I want a way to accept the query as an array and validate it...
-    return "http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr;
+    return "http://"+HOST+":"+PORT+"/srv/"+endpoint+formatQueryParameters(queryArr);
   }
 
+  // crude parameter formatting
+  // no sanitizing for now...
+  // takes an array of {p,v} pairs
+  function formatQueryParameters(params){
+    return "?"+params.map(function(pv){return pv.p + "=" + pv.v}).join("&");
+  }
+
+  // most pathetic testing ever...
+  // console.log(formatQueryParameters([{p:"boo",v:"234"},{p:"zagbar",v:2341}]) ===  '?boo=234&zagbar=2341');
+
   function getForecast($http) {
-    $http.get(sodecUrl("latest-forecast",""))
+    $http.get(sodecUrl("latest-forecast",[]))
       .then (function (forecastResponse) {
         var forecast = forecastResponse.data;
         var timestamp = forecast.timestamp;
@@ -110,20 +126,76 @@
       })
   }
 
+  // timestamp in seconds
+  function updateElectricGenerationDay(scope,http,device,ts,currentReading) {
+    http.get(sodecUrl("first-by-interval",
+                     [{p:"measurement",v:"electric_power"},
+                      {p:"device",v:device},
+                      {p:"start",v:ts - SECONDS_IN_DAY},
+                      {p:"end",v:ts},
+                      {p:"interval",v:SECONDS_IN_DAY}]))
+      .then(function(result){
+        var table = result.data;
+        var lastrow = table[table.length-1];
+        var wattseconds = currentReading - lastrow.r;
+        var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
+        var kwhDisplay = Math.round(kwh * 10)/10;
+        scope.elec_gen.day[device] = kwhDisplay;
+      })
+  }
+
+
+  function updateElectricGenerationWeek(scope,http,device,ts,currentReading) {
+    http.get(sodecUrl("first-by-interval",
+                     [{p:"measurement",v:"electric_power"},
+                      {p:"device",v:device},
+                      {p:"start",v:ts - SECONDS_IN_MONTH},
+                      {p:"end",v:ts},
+                      {p:"interval",v:SECONDS_IN_MONTH}]))
+      .then(function(result){
+        var table = result.data;
+        var lastrow = table[table.length-1];
+        var wattseconds = currentReading - lastrow.r;
+        var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
+        var kwhDisplay = Math.round(kwh * 10)/10;
+        scope.elec_gen.week[device] = kwhDisplay;
+      })
+  }
+
+  // update all time scales for electric generation for one device
+  function updateElectricGeneration($scope,$http,device,ts,
+                                    currentReading) {
+    $http.get(sodecUrl("latest-event",
+                       [{p:"measurement",v:"electric_power"},
+                        {p:"device",v:device}]))
+      .then (function (result) {
+        var currentReading = result.data;
+        updateElectricGenerationDay($scope,$http,device,ts,
+                                    currentReading);
+       /* updateElectricGenerationWeek($scope,$http,device,ts,
+                                     currentReading) */
+      })
+  }
+
+
   // readings older than 5 minutes really shouldn't be displayed
   // as current
+ 
   var SOMEWHAT_CURRENT = (5 * 60);
 
   // compute the "instantaneous" power use of a device
   // returns a number representing average watts or "no events"
   function electricUse(scope,http,device,isGeneration) {
     // silly to fetch this over and over again...
-    http.get(sodecUrl("timestamp",""))
+    http.get(sodecUrl("timestamp",[]))
       .then(function(timestampResponse){
         var ts = timestampResponse.data.timestamp;
         var ts5 = ts - SOMEWHAT_CURRENT;
-        http.get(sodecUrl("events-in-range","?measurement=electric_power&device="
-                          +device+"&start="+ts5+"&end="+ts))
+        http.get(sodecUrl("events-in-range",
+                          [{p:"measurement",v:"electric_power"},
+                           {p:"device",v:device},
+                           {p:"start",v:ts5},
+                           {p:"end",v:ts}]))
           .then(function(eventsResponse) {
             var events = eventsResponse.data;
             if (events.length < 2) {
@@ -149,7 +221,9 @@
       var numReading = parseInt(reading)/10
       scope.s_temp_obj_display[id] = numReading + "°";
       scope.s_temp_obj_concern[id] =
-        ((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
+        "no_concern"
+      //((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern")
+      ;
     }
   }
 
@@ -169,7 +243,7 @@
   // update the display of the given electricity usage given a reading *as a number*
   function updateElectricPowerDisplay(scope,id,reading,isGeneration){
     var roundedReading = Math.round(reading * 10) / 10;
-    scope.elec_display[id] = roundedReading;
+    scope.elec_use[id] = roundedReading;
     if (isGeneration) {
       scope.elec_concern[id] = "no_concern";
     } else {
@@ -187,7 +261,9 @@
     var updateFn = UPDATE_FN_TABLE[measurement];
     for (var i = 0; i < deviceList.length; i++) {
       var id = deviceList[i];
-      http.get(sodecUrl("latest-event","?measurement="+measurement+"&device="+id))
+      http.get(sodecUrl("latest-event",
+                        [{p:"measurement",v:measurement},
+                         {p:"device",v:id}]))
         .then((function(id,latestResponse){
           updateFn(scope,id,latestResponse.data);
         }).bind(undefined,id))
@@ -196,20 +272,20 @@
 
   // update all electric sensors. For these, we need to take the "derivative"
   // (actually just the difference in the last two readings / time-diff
-  function updateAllElectric(scope,http) {
+  function updateAllElectric(scope,http,ts) {
     var deviceList = ELECTRIC_POWER_DEVICES;
     deviceList.map(function(device) {
-      electricUse(scope,http,device,false);
+      electricUse(scope,http,device,false,ts);
     })
     var deviceListGen = ELECTRIC_POWER_GENERATION_DEVICES;
     deviceListGen.map(function(device) {
-      electricUse(scope,http,device,true);
+      electricUse(scope,http,device,true,ts);
     })
   }
 
   // update the insights section
   function updateInsights($http) {
-    $http.get(sodecUrl("latest-insights",""))
+    $http.get(sodecUrl("latest-insights",[]))
       .then (function(response){
         var insights = response.data;
         var insightItems = insights.map(renderInsightText)
@@ -229,17 +305,26 @@
   function updatePage($scope,$http){
     updateSome($scope,$http,'temperature');
     updateSome($scope,$http,'humidity');
-    updateAllElectric($scope,$http);
     updateInsights($http);
+    $http.get(sodecUrl("timestamp",[]))
+      .then (function (result) {
+        var ts = result.data.timestamp;
+        updateElectricGeneration($scope,$http,"main_solar_array",ts)
+        updateElectricGeneration($scope,$http,"bifacial_solar_array",ts)
+ 
+        // not doing anything right now...
+        //updateAllElectric($scope,$http,ts);
+      })
   }
 
   app.controller("SolarHouseController", function($scope, $http) {
-    $scope.s_temp_obj_display = [];
-    $scope.s_temp_obj_concern = [];
-    $scope.s_hum_obj_display = [];
-    $scope.s_hum_obj_concern = [];
-    $scope.elec_display = [];
-    $scope.elec_concern = [];
+    $scope.s_temp_obj_display = {};
+    $scope.s_temp_obj_concern = {};
+    $scope.s_hum_obj_display = {};
+    $scope.s_hum_obj_concern = {};
+    $scope.elec_gen = {day:{},week:{}};
+    $scope.elec_use = {};
+    $scope.elec_concern = {};
 
     // update everything every fifteen seconds...
     var updater = updatePage.bind(undefined,$scope,$http);
