@@ -140,13 +140,14 @@
   }
 
   // update the display of the given temperature with the given reading
+  // (reading is raw data from http)
   function updateTemperatureDisplay(scope,id,reading){
     if (reading === "no events"){
       scope.s_temp_obj_display[id] = "n/a";
       scope.s_temp_obj_concern[id] = "no_concern";
     } else {
       var numReading = parseInt(reading)/10
-      scope.s_temp_obj_display[id] = numReading;
+      scope.s_temp_obj_display[id] = numReading + "°";
       scope.s_temp_obj_concern[id] =
         ((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? "concern" : "no_concern");
     }
@@ -159,7 +160,7 @@
       scope.s_hum_obj_concern[id] = "no_concern";
     } else {
       var numReading = parseInt(reading)/10
-      scope.s_hum_obj_display[id] = numReading;
+      scope.s_hum_obj_display[id] = numReading + "%";
       scope.s_hum_obj_concern[id] =
         ((numReading > HUMIDITY_CONCERN_THRESHOLD) ? "concern" : "no_concern");
     }
