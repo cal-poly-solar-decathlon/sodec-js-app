@@ -265,3 +265,23 @@ span
 {
     padding-right:10px;
 }
+
+.nav-tabs > li > a:hover {
+    color: rgb(251,176,64);
+    background-color: rgb(0,78,56);
+    border: 1px solid rgb(0,78,56);
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: rgb(251,176,64);
+    cursor: default;
+    background-color: rgb(0,78,56);
+    border: 1px solid rgb(0,78,56);
+    border-bottom-color: transparent;
+}
+
+.UISubMenuItem
+{
+    color: rgb(251,176,64);
+}
