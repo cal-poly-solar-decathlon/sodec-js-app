@@ -92,12 +92,13 @@
     var app = angular.module("SolarHouseHistoricalDataApp", ['ngRoute', 'chart.js'])
         .config(function($routeProvider){
             $routeProvider
-                .when('/tempHistory', {templateUrl:'./partials/tempHistory.html'})
-                .when('/humHistory', {templateUrl:'./partials/humHistory.html'})
+                .when('/tempHistory', {templateUrl:'./partials/tempHistory/index.html'})
+                .when('/humHistory', {templateUrl:'./partials/humHistory/index.html'})
                 .when('/elecUseHistory', {templateUrl:'./partials/elecUseHistory.html'})
                 .when('/lightLevelHistory', {templateUrl:'./partials/lightLevelHistory.html'})
                 .when('/occHistory', {templateUrl:'./partials/occHistory.html'})
                 .when('/tempHistory/index', {templateUrl:"./partials/tempHistory/index.html"})
+                .when('/humHistory/index', {templateUrl:"./partials/humHistory/index.html"})
                 .otherwise({redirectTo:'/home', templateUrl:'./partials/home.html'});
         })
 
@@ -261,11 +262,37 @@
             $scope.week = choice;
         };
 
+        $scope.updateDeviceTempHum = function(choice) {
+            $scope.deviceTempHum = choice;
+
+            switch(choice) {
+                case "bedroom":
+                    $scope.displayDeviceTempHum = "Bedroom";
+                    break;
+                case "living_room":
+                    $scope.displayDeviceTempHum = "Living Room";
+                    break;
+                case "kitchen":
+                    $scope.displayDeviceTempHum = "Kitchen";
+                    break;
+                case "outside":
+                    $scope.displayDeviceTempHum = "Outside";
+                    break;
+                case "bathroom":
+                    $scope.displayDeviceTempHum = "Bathroom";
+                    break;
+            }
+        }
+
         $scope.month = $scope.monthButtonText;
 
         $scope.year = parseInt($scope.yearButtonText);
 
         $scope.week = $scope.weekButtonText;
+
+        $scope.deviceTempHum = "bedroom";
+
+        $scope.displayDeviceTempHum = "Bedroom";
 
         $scope.deviceHistoricalDataIsEmpty = function(deviceHistoricalDataArray) {
 

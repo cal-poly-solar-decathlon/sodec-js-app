@@ -1,0 +1,58 @@
+<div class="dropdown pull-right yearDropDown">
+    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">{{weekButtonText}}
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li><a ng-click="updateWeekButtonText('Week 1'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">Week 1</a></li>
+        <li><a ng-click="updateWeekButtonText('Week 2'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">Week 2</a></li>
+        <li><a ng-click="updateWeekButtonText('Week 3'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">Week 3</a></li>
+        <li><a ng-click="updateWeekButtonText('Week 4'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">Week 4</a></li>
+    </ul>
+</div>
+
+<div class="dropdown pull-right monthDropDown">
+    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">{{monthButtonText}}
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li><a ng-click="updateMonthButtonText('January'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">January</a></li>
+        <li><a ng-click="updateMonthButtonText('February'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">February</a></li>
+        <li><a ng-click="updateMonthButtonText('March'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">March</a></li>
+        <li><a ng-click="updateMonthButtonText('April'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">April</a></li>
+        <li><a ng-click="updateMonthButtonText('May'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">May</a></li>
+        <li><a ng-click="updateMonthButtonText('June'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">June</a></li>
+        <li><a ng-click="updateMonthButtonText('July'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">July</a></li>
+        <li><a ng-click="updateMonthButtonText('August'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">August</a></li>
+        <li><a ng-click="updateMonthButtonText('September'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">September</a></li>
+        <li><a ng-click="updateMonthButtonText('October'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">October</a></li>
+        <li><a ng-click="updateMonthButtonText('November'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">November</a></li>
+        <li><a ng-click="updateMonthButtonText('December'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">December</a></li>
+    </ul>
+</div>
+
+<div class="dropdown pull-right yearDropDown">
+    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">{{yearButtonText}}
+        <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li><a ng-click="year=2015; updateYearButtonText('2015'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">2015</a></li>
+        <li><a ng-click="year=2014; updateYearButtonText('2014'); setRoute('humHistory/index/'); obtainHistoricalData('humidity', 'bedroom', 86000, month, year, week);">2014</a></li>
+    </ul>
+</div>
+
+<h1>Humidity Historical Data</h1>
+<h2>{{displayDeviceTempHum}}</h2>
+<h3>{{monthButtonText}} {{yearButtonText}} {{weekButtonText}}</h3>
+
+<div ng-if="deviceHistoricalDataIsEmpty(displayData.data[0])">
+    <h2 style="color:red">No Data</h2>
+</div>
+
+<div ng-if="!deviceHistoricalDataIsEmpty(displayData.data[0])">
+    <canvas id="line" class="chart chart-line" chart-data="displayData.data"
+            chart-labels="displayData.labels" chart-click="displayData.onClick" colours="displayData.colours">
+    </canvas>
+</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>

@@ -290,3 +290,22 @@ span
 {
     color: rgb(251,176,64);
 }
+
+/*Sub-Menu Styles*/
+
+ul.sub1 {
+    position:absolute;
+    left:100px;
+    width:150px;
+    visibility: hidden;
+    background-color: #ddd;
+    padding-bottom:10px;
+    padding-top:10px;
+    list-style-type:square;
+}
+ul.dropdown-menu li:hover .sub1 {
+    visibility:visible;
+}
+
+
+/*browser reset*/
