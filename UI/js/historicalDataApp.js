@@ -137,23 +137,57 @@
         }
     }
 
-    function calculateLabels(month, year) {
+    function calculateWeekEpochTime(week, month, year) {
+        var startOfMonth = new Date(year, getMonthNumber(month), 1).getTime() / 1000;
+        var endOfMonth = new Date(year, getMonthNumber(month), daysInMonth(getMonthNumber(month), year)).getTime() / 1000;
+        var weekEpochTime = [];
+
+        switch(week) {
+            case "Week 1":
+                weekEpochTime = [startOfMonth, startOfMonth + 604800];
+                break;
+            case "Week 2":
+                weekEpochTime = [startOfMonth + 604800, startOfMonth + 604800  + 604800];
+                break;
+            case "Week 3":
+                weekEpochTime = [startOfMonth + 604800 + 604800, startOfMonth + 604800 + 604800 + 604800];
+                break;
+            case "Week 4":
+                weekEpochTime = [startOfMonth + 604800 + 604800 + 604800, endOfMonth];
+                break;
+        }
+
+        return weekEpochTime;
+    }
+
+    function getDayFromEpoch(timeInSeconds) {
+        var d = new Date(timeInSeconds * 1000);
+        return d.getDate();
+    }
+
+    function calculateLabels(month, year, week) {
         var labels = [];
-        for(var i = 1; i <= daysInMonth(getMonthNumber(month), year); i++) {
+        var weekEpochTime = calculateWeekEpochTime(week, month, year);
+        var start = weekEpochTime[0];
+        var end = weekEpochTime[1];
+        for(var i = getDayFromEpoch(start); i <= getDayFromEpoch(end); i ++) {
             labels.push(i);
         }
 
         return labels;
     }
 
-    function getMeanByInterval($http, $scope, measurement, device, interval, month, year, start, end)
+    function getMeanByInterval($http, $scope, measurement, device, interval, month, year, week, start, end)
     {
         //get full month data
         console.log("Days in Month " + month + ": " + daysInMonth(getMonthNumber(month), year));
 
-        if(month && year) {
-            start = new Date(year, getMonthNumber(month), 1).getTime() / 1000;
-            end = new Date(year, getMonthNumber(month), daysInMonth(getMonthNumber(month), year)).getTime() / 1000;
+        if(month && year && week) {
+            //start = new Date(year, getMonthNumber(month), 1).getTime() / 1000;
+            //end = new Date(year, getMonthNumber(month), daysInMonth(getMonthNumber(month), year)).getTime() / 1000;
+            var weekStartAndEnd = calculateWeekEpochTime(week, month, year);
+            start = weekStartAndEnd[0];
+            end = weekStartAndEnd[1];
         }
 
         console.log("start: " + start);
@@ -161,8 +195,6 @@
 
         return $http.get(sodecUrl("mean-by-interval","?measurement=" + measurement + "&device=" + device + "&start=" + start + "&end=" + end + "&interval=" + interval))
             .then(function(historicalData) {
-                console.log("PRINT ONE");
-                console.log(historicalData);
                 deviceHistoricalDataArray[month] = [];
                 for(var i = 0; i <  historicalData.data.length; i++) {
                     console.log(historicalData.data[i].r);
@@ -173,11 +205,7 @@
                     }
                 }
 
-                console.log(deviceHistoricalDataArray[month]);
-
-                var labels = calculateLabels(month, year);
-
-                console.log(labels);
+                var labels = calculateLabels(month, year, week);
 
                 $scope.displayData = {
                     "data": [deviceHistoricalDataArray[month]],
@@ -226,9 +254,18 @@
             $scope.month = choice;
         };
 
+        $scope.weekButtonText = "Week 1";
+
+        $scope.updateWeekButtonText = function(choice){
+            $scope.weekButtonText = choice;
+            $scope.week = choice;
+        };
+
         $scope.month = $scope.monthButtonText;
 
         $scope.year = parseInt($scope.yearButtonText);
+
+        $scope.week = $scope.weekButtonText;
 
         $scope.deviceHistoricalDataIsEmpty = function(deviceHistoricalDataArray) {
 
@@ -243,13 +280,13 @@
             }
 
             return true;
-        }
+        };
 
-        $scope.obtainHistoricalData = function(measurement, device, interval, month, year, start, end) {
-            getMeanByInterval($http, $scope, measurement, device, interval, month, year, start, end);
-        }
+        $scope.obtainHistoricalData = function(measurement, device, interval, month, year, week, start, end) {
+            getMeanByInterval($http, $scope, measurement, device, interval, month, year, week, start, end);
+        };
 
-        $scope.obtainHistoricalData('temperature', 'bedroom', 86000, "September", 2015);
+        $scope.obtainHistoricalData('temperature', 'bedroom', 86000, "September", 2015, "Week 1");
         $location.path("tempHistory/index");
 
     }])
