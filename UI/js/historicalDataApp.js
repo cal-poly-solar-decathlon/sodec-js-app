@@ -86,6 +86,7 @@
     // construct a sodec url
     function sodecUrl(endpoint,queryStr){
         // I want a way to accept the query as an array and validate it...
+        console.log("http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr);
         return "http://"+HOST+":"+PORT+"/srv/"+endpoint+queryStr;
     }
 

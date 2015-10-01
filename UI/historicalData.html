@@ -79,7 +79,7 @@
         <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown" ng-cloak>{{sensorButtonText}}
             <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li><a ng-click="setRoute('tempHistory'); updateSensorButtonText('Temperature');">Temperature</a>
+            <li><a ng-click="setRoute('tempHistory'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, 86000, month, year, week);">Temperature</a>
                 <ul class="sub1">
                     <li><a ng-click="updateDeviceTempHum('living_room'); obtainHistoricalData('temperature', deviceTempHum, 86000, month, year, week);">Living Room</a>
                     </li>
@@ -93,7 +93,7 @@
                     </li>
                 </ul>
             </li>
-            <li><a ng-click="setRoute('humHistory'); updateSensorButtonText('Humidity');">Humidity</a>
+            <li><a ng-click="setRoute('humHistory'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, 86000, month, year, week);">Humidity</a>
                 <ul class="sub1">
                     <li><a ng-click="updateDeviceTempHum('living_room'); obtainHistoricalData('humidity', deviceTempHum, 86000, month, year, week);">Living Room</a>
                     </li>
