@@ -43,20 +43,32 @@
         "water_supply_booster_pump",
         "vehicle_charging",
         "heat_pump",
-        "air_handler"];
-
-    var ELECTRIC_POWER_GENERATION_DEVICES = [
+        "air_handler",
         "main_solar_array",
         "bifacial_solar_array"];
 
     // this table maps measurement name (e.g. 'temperature') to the devices that
     // belong to that measurement
     var DEVICE_TABLE = {
-        temperature : TEMP_HUM_DEVICES,
-        humidity : TEMP_HUM_DEVICES,
+        "temperature": TEMP_HUM_DEVICES,
+        "humidity": TEMP_HUM_DEVICES,
+        "electric_power": ELECTRIC_POWER_DEVICES
     };
 
-    var deviceHistoricalDataArrays = {
+    var monthsOfYear = ["January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"];
+
+    var deviceHistoricalDataArray = {
         "January" : [],
         "February" : [],
         "March" : [],
@@ -70,17 +82,6 @@
         "November" : [],
         "December" : []
     };
-
-    function fillHistoricalDataArrays($http) {
-
-        for (var i = 0; i < deviceList.length; i++) {
-            var id = deviceList[i];
-            http.get(sodecUrl("latest-event","?measurement="+measurement+"&device="+id))
-                .then((function(id,latestResponse){
-                    updateFn(scope,id,latestResponse.data);
-                }).bind(undefined,id))
-        }
-    }
 
     // construct a sodec url
     function sodecUrl(endpoint,queryStr){
@@ -96,58 +97,56 @@
                 .when('/elecUseHistory', {templateUrl:'./partials/elecUseHistory.html'})
                 .when('/lightLevelHistory', {templateUrl:'./partials/lightLevelHistory.html'})
                 .when('/occHistory', {templateUrl:'./partials/occHistory.html'})
-                .when('/tempHistory/august/', {templateUrl:"./partials/tempHistory/august2015.html"})
-                .when('/tempHistory/september/', {templateUrl:"./partials/tempHistory/september2015.html"})
-                .when('/tempHistory/october/', {templateUrl:"./partials/tempHistory/october2015.html"})
+                .when('/tempHistory/index', {templateUrl:"./partials/tempHistory/index.html"})
                 .otherwise({redirectTo:'/home', templateUrl:'./partials/home.html'});
         })
 
     function daysInMonth(month, year) {
-        return new Date(year, month, 0).getDate();
+        var monthStart = new Date(year, month, 1);
+        var monthEnd = new Date(year, month + 1, 1);
+        var monthLength = (monthEnd - monthStart) / (1000 * 60 * 60 * 24);
+        return monthLength;
     }
 
     function getMonthNumber(month) {
         switch(month) {
             case "January":
                 return 0;
-                break;
             case "February":
                 return 1;
-                break;
             case "March":
                 return 2;
-                break;
             case "April":
                 return 3;
-                break;
             case "May":
                 return 4;
-                break;
             case "June":
                 return 5;
-                break;
             case "July":
                 return 6;
-                break;
             case "August":
                 return 7;
-                break;
             case "September":
                 return 8;
-                break;
             case "October":
                 return 9;
-                break;
             case "November":
                 return 10;
-                break;
             case "December":
                 return 11;
-                break;
         }
     }
 
-    function getMeanByInterval($http, measurement, device, start, end, interval, month, year)
+    function calculateLabels(month, year) {
+        var labels = [];
+        for(var i = 1; i <= daysInMonth(getMonthNumber(month), year); i++) {
+            labels.push(i);
+        }
+
+        return labels;
+    }
+
+    function getMeanByInterval($http, $scope, measurement, device, interval, month, year, start, end)
     {
         //get full month data
         console.log("Days in Month " + month + ": " + daysInMonth(getMonthNumber(month), year));
@@ -162,118 +161,96 @@
 
         return $http.get(sodecUrl("mean-by-interval","?measurement=" + measurement + "&device=" + device + "&start=" + start + "&end=" + end + "&interval=" + interval))
             .then(function(historicalData) {
-                //console.log("MONTH DATA: " + month);
+                console.log("PRINT ONE");
                 console.log(historicalData);
+                deviceHistoricalDataArray[month] = [];
                 for(var i = 0; i <  historicalData.data.length; i++) {
                     console.log(historicalData.data[i].r);
                     if (historicalData.data[i].r)
-                        deviceHistoricalDataArrays[month].push(historicalData.data[i].r);
+                        deviceHistoricalDataArray[month].push(historicalData.data[i].r);
                     else {
-                        //console.log("MONTHO: " + month);
-                        deviceHistoricalDataArrays[month].push(-100);
+                        deviceHistoricalDataArray[month].push(-100);
                     }
                 }
+
+                console.log(deviceHistoricalDataArray[month]);
+
+                var labels = calculateLabels(month, year);
+
+                console.log(labels);
+
+                $scope.displayData = {
+                    "data": [deviceHistoricalDataArray[month]],
+                    "labels": labels,
+                    onClick : function (points, evt) {
+                        console.log(points, evt)
+                    },
+                    "colours": [{
+                        "fillColor": "rgba(251,176,64, .3)",
+                        "strokeColor": "rgba(0,78,56,1)",
+                        "pointColor": "black",
+                        "pointStrokeColor": "#fff",
+                        "pointHighlightFill": "#fff",
+                        "pointHighlightStroke": "rgba(151,187,205,0.8)"
+                    }],
+                    "month": month,
+                    "year": year
+                };
             });
     }
 
     app.controller('viewController', ['$scope', '$location', '$http', '$routeParams', function($scope, $location, $http) {
+        var vm = this;
+
         $scope.setRoute = function(route){
             $location.path(route);
-        }
+        };
 
-        //$scope.year = $routeParams.year;
+        $scope.sensorButtonText = "Temperature";
 
-        getMeanByInterval($http, 'temperature', 'bedroom', 1441065600, 1443577325, 86000, "August", 2015)
-            .then(function() {
+        $scope.updateSensorButtonText = function(choice){
+            $scope.sensorButtonText = choice;
+        };
 
-                console.log("Fetching August Data");
+        $scope.yearButtonText = "2015";
 
-                var augustLabels = [];
-                for(var augday = 1; augday <= 31; augday++) {
-                    augustLabels.push(augday);
-                }
+        $scope.updateYearButtonText = function(choice){
+            $scope.yearButtonText = choice;
+            $scope.year = parseInt($scope.yearButtonText);
+        };
 
-                $scope.tempDataGraphAug = {
-                    "data": [deviceHistoricalDataArrays["August"]],
-                    "labels": augustLabels,
-                    onClick : function (points, evt) {
-                        console.log(points, evt)
-                    },
-                    "colours": [{
-                        "fillColor": "rgba(251,176,64, .3)",
-                        "strokeColor": "rgba(0,78,56,1)",
-                        "pointColor": "black",
-                        "pointStrokeColor": "#fff",
-                        "pointHighlightFill": "#fff",
-                        "pointHighlightStroke": "rgba(151,187,205,0.8)"
-                    }]
-                };
-            });
+        $scope.monthButtonText = "September";
 
-        //use scope to make year dynamic, so it can be binded to page and path easily
+        $scope.updateMonthButtonText = function(choice){
+            $scope.monthButtonText = choice;
+            $scope.month = choice;
+        };
 
-        getMeanByInterval($http, 'temperature', 'bedroom', 1441065600, 1443577325, 86000, "September", 2015)
-            .then(function() {
-                var septemberLabels = [];
-                for(var septday = 1; septday <= 30; septday++) {
-                    septemberLabels.push(septday);
-                }
+        $scope.month = $scope.monthButtonText;
 
-                $scope.tempDataGraphSept = {
-                    "data": [deviceHistoricalDataArrays["September"]],
-                    "labels": septemberLabels,
-                    onClick : function (points, evt) {
-                        console.log(points, evt)
-                    },
-                    "colours": [{
-                        "fillColor": "rgba(251,176,64, .3)",
-                        "strokeColor": "rgba(0,78,56,1)",
-                        "pointColor": "black",
-                        "pointStrokeColor": "#fff",
-                        "pointHighlightFill": "#fff",
-                        "pointHighlightStroke": "rgba(151,187,205,0.8)"
-                    }]
-                };
-            });
+        $scope.year = parseInt($scope.yearButtonText);
 
-        getMeanByInterval($http, 'temperature', 'bedroom', 1441065600, 1443577325, 86000, "October", 2015)
-            .then(function() {
-                console.log("Fetching October Data");
-                var octoberLabels = [];
-                for(var octday = 1; octday <= 31; octday++) {
-                    octoberLabels.push(octday);
-                }
+        $scope.deviceHistoricalDataIsEmpty = function(deviceHistoricalDataArray) {
 
-                $scope.tempDataGraphOct = {
-                    "data": [deviceHistoricalDataArrays["October"]],
-                    "labels": octoberLabels,
-                    onClick : function (points, evt) {
-                        console.log(points, evt)
-                    },
-                    "colours": [{
-                        "fillColor": "rgba(251,176,64, .3)",
-                        "strokeColor": "rgba(0,78,56,1)",
-                        "pointColor": "black",
-                        "pointStrokeColor": "#fff",
-                        "pointHighlightFill": "#fff",
-                        "pointHighlightStroke": "rgba(151,187,205,0.8)"
-                    }]
-                };
-            });
-
-        $scope.deviceHistoricalDataIsEmpty = function(historicalDataArray) {
-            if(historicalDataArray.length == 0) {
+            if(deviceHistoricalDataArray.length == 0) {
                 return true;
             }
 
-            for(var i = 0; i < historicalDataArray.length; i++) {
-                if(historicalDataArray[i] != -100) {
+            for(var i = 0; i < deviceHistoricalDataArray.length; i++) {
+                if(deviceHistoricalDataArray[i] != -100) {
                     return false;
                 }
             }
 
             return true;
         }
+
+        $scope.obtainHistoricalData = function(measurement, device, interval, month, year, start, end) {
+            getMeanByInterval($http, $scope, measurement, device, interval, month, year, start, end);
+        }
+
+        $scope.obtainHistoricalData('temperature', 'bedroom', 86000, "September", 2015);
+        $location.path("tempHistory/index");
 
     }])
 })

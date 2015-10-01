@@ -1,28 +1,32 @@
-<h1>Temperature History</h1>
+<h1>Temperature Historical Data</h1>
+
+{{setRoute('tempHistory/index'); obtainHistoricalData('temperature', 'bedroom', 86000, 'September', 2015);}}
 
 <div class="dropdown pull-right">
-    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">Select Month
+    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">{{monthButtonText}}
         <span class="caret"></span></button>
     <ul class="dropdown-menu">
-        <li><a ng-click="setRoute('tempHistory/january/')">January</a></li>
-        <li><a ng-click="setRoute('tempHistory/february/')">February</a></li>
-        <li><a ng-click="setRoute('tempHistory/march/')">March</a></li>
-        <li><a ng-click="setRoute('tempHistory/april/')">April</a></li>
-        <li><a ng-click="setRoute('tempHistory/may/')">May</a></li>
-        <li><a ng-click="setRoute('tempHistory/august/')">August</a></li>
-        <li><a ng-click="setRoute('tempHistory/september/')">September</a></li>
-        <li><a ng-click="setRoute('tempHistory/october/')">October</a></li>
-        <li><a ng-click="setRoute('tempHistory/november/')">November</a></li>
-        <li><a ng-click="setRoute('tempHistory/december/')">December</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'January', year);">January</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'February', year);">February</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'March', year);">March</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'April', year);">April</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'May', year);">May</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'June', year);">June</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'July', year);">July</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'August', year);">August</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'September', year);">September</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'October', year);">October</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'November', year);">November</a></li>
+        <li><a ng-click="setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'December', year);">December</a></li>
     </ul>
 </div>
 
 <div class="dropdown pull-right yearDropDown">
-    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">Select Year
+    <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown">{{yearButtonText}}
         <span class="caret"></span></button>
     <ul class="dropdown-menu">
-        <li><a ng-click="year=2015">2015</a></li>
-        <li><a ng-click="year=2014">2014</a></li>
+        <li><a ng-click="year=2015; updateYearButtonText('2015'); setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'September', year);">2015</a></li>
+        <li><a ng-click="year=2014; updateYearButtonText('2014'); setRoute('tempHistory/index/'); obtainHistoricalData('temperature', 'bedroom', 86000, 'September', year);">2014</a></li>
     </ul>
 </div>
 

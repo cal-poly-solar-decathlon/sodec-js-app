@@ -266,6 +266,11 @@ span
     padding-right:10px;
 }
 
+.monthDropDown
+{
+    padding-right:10px;
+}
+
 .nav-tabs > li > a:hover {
     color: rgb(251,176,64);
     background-color: rgb(0,78,56);
