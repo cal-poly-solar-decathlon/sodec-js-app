@@ -172,7 +172,10 @@
         var weekEpochTime = calculateWeekEpochTime(week, month, year);
         var start = weekEpochTime[0];
         var end = weekEpochTime[1];
-        for(var i = getDayFromEpoch(start); i <= getDayFromEpoch(end); i ++) {
+        for(var i = getDayFromEpoch(start); i <= getDayFromEpoch(end); i++) {
+            for(var j = 1; j <= 6; j++) {
+                labels.push(j);
+            }
             labels.push(i);
         }
 
@@ -201,9 +204,9 @@
                 for(var i = 0; i <  historicalData.data.length; i++) {
                     console.log(historicalData.data[i].r);
                     if (historicalData.data[i].r)
-                        deviceHistoricalDataArray[month].push(historicalData.data[i].r);
+                        deviceHistoricalDataArray[month].push((historicalData.data[i].r)/10);
                     else {
-                        deviceHistoricalDataArray[month].push(-100);
+                        deviceHistoricalDataArray[month].push("");
                     }
                 }
 
@@ -302,7 +305,7 @@
             }
 
             for(var i = 0; i < deviceHistoricalDataArray.length; i++) {
-                if(deviceHistoricalDataArray[i] != -100) {
+                if(deviceHistoricalDataArray[i] != "") {
                     return false;
                 }
             }
@@ -314,7 +317,8 @@
             getMeanByInterval($http, $scope, measurement, device, interval, month, year, week, start, end);
         };
 
-        $scope.obtainHistoricalData('temperature', 'bedroom', 86000, "September", 2015, "Week 1");
+        $scope.timeInterval = 7200;
+        $scope.obtainHistoricalData('temperature', 'bedroom', $scope.timeInterval, "September", 2015, "Week 1");
         $location.path("tempHistory/index");
 
     }])
