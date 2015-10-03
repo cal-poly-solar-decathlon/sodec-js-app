@@ -7,10 +7,10 @@
   // of responses to the HTTP requests that it makes. And indeed in not
   // delivering things like NaN to the sodec server.
 
-  /*var HOST = 'calpolysolardecathlon.org';
-  var PORT =  3000;*/
-  var HOST = 'localhost';
+  var HOST = 'calpolysolardecathlon.org';
   var PORT =  3000;
+  /*var HOST = 'localhost';
+  var PORT =  3000;*/
 
   // temperature expressed in degrees:
   var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
