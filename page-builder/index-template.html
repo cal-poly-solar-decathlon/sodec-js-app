@@ -116,7 +116,7 @@
                 <img src="./images/energyUse150X150.png">
             </div>
             <div class="col-md-10">
-              <div class="homepageDataTable"><div class="tableHeader">ENERGY USE TODAY (kWh)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec_concern.laundry">{{elec_use.laundry}}</td><td ng-class="elec_concern.dishwasher">{{elec_use.dishwasher}}</td><td ng-class="elec_concern.refrigerator">{{elec_use.refrigerator}}</td><td ng-class="elec_concern.induction_stove">{{elec_use.induction_stove}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec_concern.microwave">{{elec_use.microwave}}</td><td ng-class="elec_concern.water_heater">{{elec_use.water_heater}}</td><td ng-class="elec_concern.greywater_pump">{{elec_use.greywater_pump}}</td><td ng-class="elec_concern.blackwater_pump">{{elec_use.blackwater_pump}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>VEHICLE</th><th>MECH OUTS</th></tr><tr><td ng-class="elec_concern.thermal_loop_pump">{{elec_use.thermal_loop_pump}}</td><td ng-class="elec_concern.water_supply_pump">{{elec_use.water_supply_pump}}</td><td ng-class="elec_concern.vehicle_charging">{{elec_use.vehicle_charging}}</td><td ng-class="elec_concern.mechanical_room_outlets">{{elec_use.mechanical_room_outlets}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>HEAT PUMP</th><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING</th></tr><tr><td ng-class="elec_concern.heat_pump">{{elec_use.heat_pump}}</td><td ng-class="elec_concern.air_handler">{{elec_use.air_handler}}</td><td ng-class="elec_concern.air_conditioning">{{elec_use.air_conditioning}}</td><td ng-class="elec_concern.lighting_1">{{elec_use.lighting_1}}</td></tr></table></div>
+              @|elec-use-rows|
             </div>
         </div>
     </div>
@@ -170,7 +170,7 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/Chart.min.js"></script>
-<script src="./js/angular-chart.min.js"></script>
+<script src="./js/angular-chart.min.js"></script> 
 <script src="./js/app.js"></script>
 </body>
 </html>

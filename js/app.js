@@ -7,9 +7,11 @@
   // of responses to the HTTP requests that it makes. And indeed in not
   // delivering things like NaN to the sodec server.
 
-  var HOST = 'calpolysolardecathlon.org';
+  /*var HOST = 'calpolysolardecathlon.org';
+  var PORT =  3000;*/
+  var HOST = 'localhost';
   var PORT =  3000;
-  
+
   // temperature expressed in degrees:
   var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
   var HUMIDITY_CONCERN_THRESHOLD = 50.0;
@@ -17,7 +19,8 @@
 
   var SECONDS_IN_DAY = 86400;
   var SECONDS_IN_HOUR = 3600;
-
+  var STALE_SECONDS = 6 * SECONDS_IN_HOUR;
+  
   // these are the temperature and humidity devices
   var TEMP_HUM_DEVICES = [
       "living_room",
@@ -33,26 +36,18 @@
     "dishwasher",
     "refrigerator",
     "induction_stove",
+    "microwave",
     "water_heater",
-    "kitchen_outlets_1",
-    "kitchen_outlets_2",
-    "living_room_outlets",
-    "dining_room_outlets_1",
-    "dining_room_outlets_2",
-    "bathroom_outlets",
-    "bedroom_outlets_1",
-    "bedroom_outlets_2",
-    "mechanical_room_outlets",
-    "entry_hall_outlets",
-    "exterior_outlets",
     "greywater_pump",
     "blackwater_pump",
     "thermal_loop_pump",
     "water_supply_pump",
-    "water_supply_booster_pump",
     "vehicle_charging",
+    "mechanical_room_outlets",
     "heat_pump",
-    "air_handler"];
+    "air_handler",
+    "air_conditioning",
+    "lighting_1"];
 
   var ELECTRIC_POWER_GENERATION_DEVICES = [
     "main_solar_array",
@@ -128,55 +123,149 @@
       })
   }
 
-  // timestamp in seconds
-  function updateElectricGenerationDay(scope,http,device,ts,currentReading) {
-    http.get(sodecUrl("first-by-interval",
+  // given an array of numbers and falses, find the last non-false value
+  // returns false if there are no non-false values
+  function findFinalValue(arr) {
+    var result = false;
+    // sad about this nasty 'return'
+    // find last index with data:
+    for (var i = arr.length-1;i>=0;i--) {
+      if (table[i].r !== false) {
+        return table[i].r;
+      }
+    }
+    return false;
+  }
+  
+  function electricPowerToday($http,device,elevenpm,now,kont) {
+    http.get(sodecUrl("last-by-interval",
                      [{p:"measurement",v:"electric_power"},
                       {p:"device",v:device},
-                      {p:"start",v:ts - SECONDS_IN_DAY},
-                      {p:"end",v:ts},
-                      {p:"interval",v:SECONDS_IN_DAY}]))
-      .then(function(result){
+                      {p:"start",v:elevenPM},
+                      {p:"end",v:nowSeconds},
+                      {p:"interval",v:SECONDS_IN_HOUR}]))
+      .then (function (result) {
         var table = result.data;
-        var lastrow = table[table.length-1];
-        var wattseconds = currentReading - lastrow.r;
-        var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
-        var kwhDisplay = Math.round(kwh * 10)/10;
-        scope.elec_gen.day[device] = kwhDisplay;
+        var firstrow = table[0];
+        // only continue if there is data from last hour of yesterday:
+        if (firstrow.r !== false) {
+          var lastReadingOfYesterday = firstrow.r;
+          var lastReadingOfToday = false;
+          // sad about this mutation...
+          // find last index with data:
+          for (var i = table.length-1;i>=0;i--) {
+            if (table[i].r !== false) {
+              lastReadingOfToday = table[i].r;
+              break;
+            }
+          }
+          // give up if no readings today:
+          if (lastReadingOfToday) {
+            var wattseconds = lastReadingOfToday - lastReadingOfYesterday;
+            var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
+            return kont(kwh);
+          }
+        }
       })
   }
 
-
-  function updateElectricGenerationWeek(scope,http,device,ts,currentReading) {
-    http.get(sodecUrl("first-by-interval",
-                     [{p:"measurement",v:"electric_power"},
-                      {p:"device",v:device},
-                      {p:"start",v:ts - SECONDS_IN_MONTH},
-                      {p:"end",v:ts},
-                      {p:"interval",v:SECONDS_IN_MONTH}]))
-      .then(function(result){
-        var table = result.data;
-        var lastrow = table[table.length-1];
-        var wattseconds = currentReading - lastrow.r;
-        var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
-        var kwhDisplay = Math.round(kwh * 10)/10;
-        scope.elec_gen.week[device] = kwhDisplay;
+  
+  function updateElectric(scope,http,device,from,to,defaultToZero,kont) {
+    var windowBegin = from - STALE_SECONDS;
+    http.get(sodecUrl("interval-last-event",
+                      [{p:"measurement",v:"electric_power"},
+                       {p:"device",v:device},
+                       {p:"start",v:windowBegin},
+                       {p:"end",v:from}]))
+      .then (function (result) {
+        var maybePrevLast = result.data;
+        var prevLast = ((defaultToZero && maybePrevLast === "no events")
+                       ? 0
+                       : maybePrevLast);
+        // give up unless we have a reading from prev period
+        if (prevLast !== "no events") {
+          http.get(sodecUrl("interval-last-event",
+                            [{p:"measurement",v:"electric_power"},
+                             {p:"device",v:device},
+                             {p:"start",v:from},
+                             {p:"end",v:to}]))
+            .then(function (result) {
+              var thisLast = result.data
+              // give up unless we have a reading from today
+              if (thisLast !== "no events") {
+                var wattseconds = thisLast - prevLast;
+                var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
+                kont(kwh);
+              }
+            })
+        }
       })
+  }
+
+  // update electric use for the day on one device
+  function updateElectricUseDay(scope,http,device) {
+    // Dates:
+    var nowDate = new Date();
+    var dayBeginDate = new Date(nowDate.getFullYear(),nowDate.getMonth(),
+                               nowDate.getDate());
+    // seconds:
+    var nowSeconds = Math.round(nowDate.valueOf() / 1000);
+    var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
+    function updateDisplay(kwh) {
+      var kwhDisplay = Math.round(kwh * 1000)/1000;
+      scope.elec_use[device] = kwhDisplay;
+    }
+    updateElectric(scope,http,device,dayBegin,nowSeconds,false,
+                   updateDisplay);
+  }
+
+  // timestamp in seconds
+  function updateElectricInputDay(scope,http,device) {
+    // Dates:
+    var nowDate = new Date();
+    var dayBeginDate = new Date(nowDate.getFullYear(),nowDate.getMonth(),
+                               nowDate.getDate());
+    // seconds:
+    var nowSeconds = Math.round(nowDate.valueOf() / 1000);
+    var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
+    function updateDisplay(kwh) {
+      var kwhDisplay = Math.round(kwh * 1000)/1000;
+      scope.elec_gen.day[device] = kwhDisplay;
+    }
+    updateElectric(scope,http,device,dayBegin,nowSeconds,false,
+                   updateDisplay);
+  }
+
+
+  function updateElectricInputWeek(scope,http,device) {
+    // Dates:
+    var nowDate = new Date();
+    var weekBeginDate = new Date(nowDate.getFullYear(),nowDate.getMonth(),
+                                 nowDate.getDate()-nowDate.getDay());
+    // seconds:
+    var nowSeconds = Math.round(nowDate.valueOf() / 1000);
+    var weekBegin = Math.round(weekBeginDate.valueOf() / 1000);
+    function updateDisplay(kwh) {
+      var kwhDisplay = Math.round(kwh * 1000)/1000;
+      scope.elec_gen.week[device] = kwhDisplay;
+    }
+    updateElectric(scope,http,device,weekBegin,nowSeconds,true,
+                   updateDisplay);
   }
 
   // update all time scales for electric generation for one device
-  function updateElectricGeneration($scope,$http,device,ts,
-                                    currentReading) {
-    $http.get(sodecUrl("latest-event",
-                       [{p:"measurement",v:"electric_power"},
-                        {p:"device",v:device}]))
-      .then (function (result) {
-        var currentReading = result.data;
-        updateElectricGenerationDay($scope,$http,device,ts,
-                                    currentReading);
-       /* updateElectricGenerationWeek($scope,$http,device,ts,
-                                     currentReading) */
-      })
+  function updateElectricInputDayAndWeek($scope,$http,device) {
+    updateElectricInputDay($scope,$http,device);
+    updateElectricInputWeek($scope,$http,device);
+  }
+
+  // update all electric sensors. For these, we need to take the "derivative"
+  // (actually just the difference in the last two readings / time-diff
+  function updateAllElectricUse(scope,http,ts) {
+    var deviceList = ELECTRIC_POWER_DEVICES;
+    deviceList.map(function(device) {
+      updateElectricUseDay(scope,http,device);
+    })
   }
 
 
@@ -272,19 +361,6 @@
     }
   }
 
-  // update all electric sensors. For these, we need to take the "derivative"
-  // (actually just the difference in the last two readings / time-diff
-  function updateAllElectric(scope,http,ts) {
-    var deviceList = ELECTRIC_POWER_DEVICES;
-    deviceList.map(function(device) {
-      electricUse(scope,http,device,false,ts);
-    })
-    var deviceListGen = ELECTRIC_POWER_GENERATION_DEVICES;
-    deviceListGen.map(function(device) {
-      electricUse(scope,http,device,true,ts);
-    })
-  }
-
   // update the insights section
   function updateInsights($http) {
     $http.get(sodecUrl("latest-insights",[]))
@@ -311,11 +387,10 @@
     $http.get(sodecUrl("timestamp",[]))
       .then (function (result) {
         var ts = result.data.timestamp;
-        updateElectricGeneration($scope,$http,"main_solar_array",ts)
-        updateElectricGeneration($scope,$http,"bifacial_solar_array",ts)
- 
-        // not doing anything right now...
-        //updateAllElectric($scope,$http,ts);
+        updateElectricInputDayAndWeek($scope,$http,"main_solar_array")
+        updateElectricInputDayAndWeek($scope,$http,"bifacial_solar_array")
+        updateElectricInputDayAndWeek($scope,$http,"mains")
+        updateAllElectricUse($scope,$http);
       })
   }
 
