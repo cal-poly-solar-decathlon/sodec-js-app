@@ -296,6 +296,7 @@ ul.sub1 {
     background-color: #ddd;
     padding-bottom:10px;
     padding-top:10px;
+    padding-right:10px;
     list-style-type:square;
 }
 ul.dropdown-menu li:hover .sub1 {

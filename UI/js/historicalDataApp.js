@@ -53,7 +53,7 @@
             $routeProvider
                 .when('/tempHistory', {templateUrl:'./partials/tempHistory/index.html'})
                 .when('/humHistory', {templateUrl:'./partials/humHistory/index.html'})
-                .when('/elecUseHistory', {templateUrl:'./partials/elecUseHistory.html'})
+                .when('/elecHistory', {templateUrl:'./partials/elecHistory/index.html'})
                 .when('/lightLevelHistory', {templateUrl:'./partials/lightLevelHistory.html'})
                 .when('/occHistory', {templateUrl:'./partials/occHistory.html'})
                 .when('/tempHistory/index', {templateUrl:"./partials/tempHistory/index.html"})
@@ -301,26 +301,99 @@
         }
 
         $scope.updateDeviceElec = function(choice) {
-            $scope.displayDeviceElec = choice;
+            $scope.deviceElec = choice;
 
             switch(choice) {
-                case "bedroom":
-                    $scope.displayDeviceElec = "Bedroom";
+                case "main_solar_array":
+                    $scope.displayDeviceElec = "Main Solar Array";
                     break;
-                case "living_room":
-                    $scope.displayDeviceElec = "Living Room";
+                case "bifacial_solar_array":
+                    $scope.displayDeviceElec = "Bifacial Solar Array";
                     break;
-                case "kitchen":
-                    $scope.displayDeviceElec = "Kitchen";
+                case "laundry":
+                    $scope.displayDeviceElec = "Laundry";
                     break;
-                case "outside":
-                    $scope.displayDeviceElec = "Outside";
+                case "dishwasher":
+                    $scope.displayDeviceElec = "Dishwasher";
                     break;
-                case "bathroom":
+                case "refrigerator":
                     $scope.displayDeviceElec = "Bathroom";
                     break;
+                case "induction_stove":
+                    $scope.displayDeviceElec = "Cooktop";
+                    break;
+                case "water_heater":
+                    $scope.displayDeviceElec = "Solar Water Heater";
+                    break;
+                case "mechanical_room_outlets":
+                    $scope.displayDeviceElec = "Mechanical Room Outlets";
+                    break;
+                case "grey_water_pump":
+                    $scope.displayDeviceElec = "Grey Water Pump";
+                    break;
+                case "blackwater_pump":
+                    $scope.displayDeviceElec = "Black Water Pump";
+                    break;
+                case "thermal_loop_pump":
+                    $scope.displayDeviceElec = "Thermal Loop Pump";
+                    break;
+                case "water_supply_pump":
+                    $scope.displayDeviceElec = "Water Supply Pump";
+                    break;
+                case "water_supply_booster_pump":
+                    $scope.displayDeviceElec = "Water Supply Booster Pump";
+                    break;
+                case "vehicle_charging":
+                    $scope.displayDeviceElec = "Vehicle Charging";
+                    break;
+                case "heat_pump":
+                    $scope.displayDeviceElec = "Heat Recovery Ventilation";
+                    break;
+                case "air_handler":
+                    $scope.displayDeviceElec = "Air Handler Outlets";
+                    break;
+                case "mains":
+                    $scope.displayDeviceElec = "Mains";
+                    break;
+                case "air_conditioning":
+                    $scope.displayDeviceElec = "Air Conditioning";
+                    break;
+                case "microwave":
+                    $scope.displayDeviceElec = "Microwave";
+                    break;
+                case "lighting_1":
+                    $scope.displayDeviceElec = "Lighting 1";
+                    break;
+                case "lighting_2":
+                    $scope.displayDeviceElec = "Lighting 2";
+                    break;
             }
+
         }
+
+        /*
+         - main_solar_array
+         - bifacial_solar_array
+         - laundry
+         - dishwasher
+         - refrigerator
+         - induction_stove (Cooktop)
+         - water_heater (Solar Water Heater)
+         - mechanical_room_outlets
+         - greywater_pump
+         - blackwater_pump
+         - thermal_loop_pump
+         - water_supply_pump
+         - water_supply_booster_pump
+         - vehicle_charging
+         - heat_pump (heat recovery ventilation)
+         - air_handler (air handler outlets)
+         - mains
+         - air_conditioning
+         - microwave
+         - lighting_1
+         - lighting_2
+         */
 
         $scope.month = $scope.monthButtonText;
 
@@ -336,7 +409,7 @@
 
         $scope.displayDeviceTempHum = "Bedroom";
 
-        $scope.deviceElec = "Main Solar Array";
+        $scope.deviceElec = "main_solar_array";
 
         $scope.displayDeviceElec = "Main Solar Array";
 

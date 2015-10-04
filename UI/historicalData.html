@@ -32,48 +32,6 @@
         <li class="active"> <a class="UISubMenuItem" href="historicalData.html">Historical Data</a></li>
     </ul>
     <br/>
-    <!--<div class="row col-md-12 insights">
-        <div class="well">
-            <h2>INSIGHTS</h2>
-            <div class="insightSubsection">
-                <h3>TEMPERATURE</h3>
-                <p>
-                    It's been quite warm lately:
-                    <ul>
-                        <li>Drink some ice cold lemonade.</li>
-                    </ul>
-                </p>
-                <h3>TEMPERATURE</h3>
-                <p>
-                    It's been quite warm lately:
-                <ul>
-                    <li>Drink some ice cold lemonade.</li>
-                </ul>
-                </p>
-                <h3>HUMIDITY</h3>
-                <p>
-                    It's been quite humid lately:
-                <ul>
-                    <li>Drink some ice cold coke.</li>
-                </ul>
-                </p>
-                <h3>ELECTRIC POWER</h3>
-                <p>
-                    You've been using a lot of electricity lately:
-                <ul>
-                    <li>Turn off the AC.</li>
-                </ul>
-                </p>
-                <h3>LIGHT LEVEL</h3>
-                <p>
-                    Light has been optimal:
-                <ul>
-                    <li>Keep it up.</li>
-                </ul>
-                </p>
-            </div>
-        </div>
-    </div>-->
 
     <div class="dropdown">
         <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown" ng-cloak>{{sensorButtonText}}
@@ -107,25 +65,37 @@
                     </li>
                 </ul>
             </li>
-            <li><a ng-click="setRoute('elecUseHistory'); updateSensorButtonText('Electricity Use');">Electricity Use</a>
+            <li><a ng-click="setRoute('elecHistory'); updateSensorButtonText('Electricity Use');">Electricity Use</a>
                 <ul class="sub1">
-                    <li><a ng-click="updateDeviceElec('main_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Main Solar Array</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('main_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Main Solar Array</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('bifacial_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Bifacial Solar Array</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('bifacial_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Bifacial Solar Array</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('laundry'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Laundry</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('laundry'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Laundry</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('dishwasher'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Dishwasher</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('dishwasher'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Dishwasher</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('refrigerator'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Refrigerator</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('refrigerator'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Refrigerator</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('induction_stove'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Cooktop</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('induction_stove'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Cooktop</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('water_heater'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('water_heater'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Water Heater</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('mechanical_room_outlets'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('mechanical_room_outlets'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Mechanical Room Outlets</a>
                     </li>
-                    <li><a ng-click="updateDeviceElec('greywater_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('greywater_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Grey Water Pump</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('black_water_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Black Water Pump</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('thermal_loop_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Thermal Loop Pump</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('water_supply_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Water Supply Pump</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('water_supply_booster_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Water Supply Booster Pump</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('vehicle_charging'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Vehicle Charging</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('heat_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Heat Recovery Ventilation</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('air_handler'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Air Handler Outlets</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('mains'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Mains</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('air_conditioning'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Air Conditioning</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('microwave'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Microwave</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('lighting_1'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Lighting 1</a>
+                    <li><a ng-click="setRoute('elecHistory'); updateDeviceElec('lighting_2'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Lighting 2</a>
                     </li>
                 </ul>
             </li>
