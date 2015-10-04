@@ -79,35 +79,56 @@
         <button class="btn btn-poly dropdown-toggle" type="button" data-toggle="dropdown" ng-cloak>{{sensorButtonText}}
             <span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li><a ng-click="setRoute('tempHistory'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Temperature</a>
+            <li><a ng-click="setRoute('tempHistory'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Temperature</a>
                 <ul class="sub1">
-                    <li><a ng-click="updateDeviceTempHum('living_room'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Living Room</a>
+                    <li><a ng-click="setRoute('tempHistory'); updateDeviceTempHum('living_room'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Living Room</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('bedroom'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Bedroom</a>
+                    <li><a ng-click="setRoute('tempHistory'); updateDeviceTempHum('bedroom'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Bedroom</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('kitchen'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Kitchen</a>
+                    <li><a ng-click="setRoute('tempHistory'); updateDeviceTempHum('kitchen'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Kitchen</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('outside'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Outside</a>
+                    <li><a ng-click="setRoute('tempHistory'); updateDeviceTempHum('outside'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Outside</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('bathroom'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, month, year, week);">Bathroom</a>
+                    <li><a ng-click="setRoute('tempHistory'); updateDeviceTempHum('bathroom'); updateSensorButtonText('Temperature'); obtainHistoricalData('temperature', deviceTempHum, timeInterval);">Bathroom</a>
                     </li>
                 </ul>
             </li>
-            <li><a ng-click="setRoute('humHistory'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Humidity</a>
+            <li><a ng-click="setRoute('humHistory'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Humidity</a>
                 <ul class="sub1">
-                    <li><a ng-click="updateDeviceTempHum('living_room'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Living Room</a>
+                    <li><a ng-click="setRoute('humHistory'); updateDeviceTempHum('living_room'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Living Room</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('bedroom'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Bedroom</a>
+                    <li><a ng-click="setRoute('humHistory'); updateDeviceTempHum('bedroom'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Bedroom</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('kitchen'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Kitchen</a>
+                    <li><a ng-click="setRoute('humHistory'); updateDeviceTempHum('kitchen'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Kitchen</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('outside'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Outside</a>
+                    <li><a ng-click="setRoute('humHistory'); updateDeviceTempHum('outside'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Outside</a>
                     </li>
-                    <li><a ng-click="updateDeviceTempHum('bathroom'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval, month, year, week);">Bathroom</a>
+                    <li><a ng-click="setRoute('humHistory'); updateDeviceTempHum('bathroom'); updateSensorButtonText('Humidity'); obtainHistoricalData('humidity', deviceTempHum, timeInterval);">Bathroom</a>
                     </li>
                 </ul>
             </li>
-            <li><a ng-click="setRoute('elecUseHistory'); updateSensorButtonText('Electricity Use');">Electricity Use</a></li>
+            <li><a ng-click="setRoute('elecUseHistory'); updateSensorButtonText('Electricity Use');">Electricity Use</a>
+                <ul class="sub1">
+                    <li><a ng-click="updateDeviceElec('main_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Main Solar Array</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('bifacial_solar_array'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Bifacial Solar Array</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('laundry'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Laundry</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('dishwasher'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Dishwasher</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('refrigerator'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Refrigerator</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('induction_stove'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">Cooktop</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('water_heater'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('mechanical_room_outlets'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    </li>
+                    <li><a ng-click="updateDeviceElec('greywater_pump'); updateSensorButtonText('Electricity Use'); obtainHistoricalData('electric_power', deviceElec, timeInterval);">solarWaterHeater</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 
