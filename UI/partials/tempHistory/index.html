@@ -1,8 +1,8 @@
 <div class="pull-right paddingRight">
-    <button ng-click="setRoute('tempHistory'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, endTime + 86400, endTime + 604800);" class="btn btn-poly dropdown-toggle pull-right" type="button">Next Week</button>
+    <button ng-click="setRoute('tempHistory'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, endTime + 86400, endTime + 604800 + 86400);" class="btn btn-poly dropdown-toggle pull-right" type="button">Next Week</button>
 </div>
 <div class="paddingRight pull-right">
-    <button ng-click="setRoute('tempHistory'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, startTime - 604800 - 86400, endTime - 604800);" class="btn btn-poly dropdown-toggle" type="button">Previous Week</button>
+    <button ng-click="setRoute('tempHistory'); obtainHistoricalData('temperature', deviceTempHum, timeInterval, startTime - 604800 - 86400, endTime - 604800 - 86400);" class="btn btn-poly dropdown-toggle" type="button">Previous Week</button>
 </div>
 
 <h1>{{sensorButtonText}} Historical Data</h1>
