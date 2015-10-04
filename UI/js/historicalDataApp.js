@@ -180,10 +180,10 @@
     function calculateLabels(start, end) {
         var labels = [];
         for(var i = start; i <= end; i += 86400) {
+            labels.push(getDayFromEpoch(i));
             for(var j = 1; j <= 6; j++) {
                 labels.push("");
             }
-            labels.push(getDayFromEpoch(i));
         }
 
         return labels;
@@ -215,7 +215,10 @@
                 for(var i = 0; i <  historicalData.data.length; i++) {
                     console.log(historicalData.data[i].r);
                     if (historicalData.data[i].r)
-                        deviceHistoricalDataArray.push((historicalData.data[i].r)/10);
+                        if(measurement == "temperature" || measurement == "humidity")
+                            deviceHistoricalDataArray.push((historicalData.data[i].r)/10);
+                        else
+                            deviceHistoricalDataArray.push(historicalData.data[i].r);
                     else {
                         deviceHistoricalDataArray.push("");
                     }
