@@ -181,7 +181,7 @@
         var labels = [];
         for(var i = start; i <= end; i += 86400) {
             for(var j = 1; j <= 6; j++) {
-                labels.push(j);
+                labels.push("");
             }
             labels.push(getDayFromEpoch(i));
         }
