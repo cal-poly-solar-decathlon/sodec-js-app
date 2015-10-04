@@ -56,8 +56,6 @@
                 .when('/elecHistory', {templateUrl:'./partials/elecHistory/index.html'})
                 .when('/lightLevelHistory', {templateUrl:'./partials/lightLevelHistory.html'})
                 .when('/occHistory', {templateUrl:'./partials/occHistory.html'})
-                .when('/tempHistory/index', {templateUrl:"./partials/tempHistory/index.html"})
-                .when('/humHistory/index', {templateUrl:"./partials/humHistory/index.html"})
                 .otherwise({redirectTo:'/home', templateUrl:'./partials/home.html'});
         })
 
@@ -437,7 +435,7 @@
 
         $scope.timeInterval = 7200;
         $scope.obtainHistoricalData('temperature', 'bedroom', $scope.timeInterval);
-        $location.path("tempHistory/index");
+        $location.path("tempHistory");
 
     }])
 })
