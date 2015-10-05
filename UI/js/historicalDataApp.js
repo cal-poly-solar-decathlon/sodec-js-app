@@ -329,7 +329,7 @@
                 case "mechanical_room_outlets":
                     $scope.displayDeviceElec = "Mechanical Room Outlets";
                     break;
-                case "grey_water_pump":
+                case "greywater_pump":
                     $scope.displayDeviceElec = "Grey Water Pump";
                     break;
                 case "blackwater_pump":
