@@ -187,14 +187,16 @@
                              {p:"start",v:from},
                              {p:"end",v:to}]))
             .then(function (result) {
-              var startSeconds = maybeFirst.t / 1000;
-              var lateStart = (startSeconds - from) > LATE_START_SECONDS;
               var thisLast = result.data
               // give up unless we have a reading from today
               if (thisLast !== "no events") {
+                var startSeconds = maybeFirst.t / 1000;
+                // don't know how best to use angular to add this data:
+                var lateStart = (startSeconds - from) > LATE_START_SECONDS;
                 var wattseconds = thisLast - maybeFirst.r;
                 var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
-                kont(kwh);
+                var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                kont(kwhDisplay);
               }
             })
         }
@@ -210,12 +212,8 @@
     // seconds:
     var nowSeconds = Math.round(nowDate.valueOf() / 1000);
     var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
-    function updateDisplay(kwh) {
-      var kwhDisplay = Math.round(kwh * 1000)/1000;
-      scope.elec_use[device] = kwhDisplay;
-    }
     updateElectric(scope,http,device,dayBegin,nowSeconds,
-                   updateDisplay);
+                   function(str){scope.elec_use[device] = str});
   }
 
   // timestamp in seconds
@@ -227,12 +225,8 @@
     // seconds:
     var nowSeconds = Math.round(nowDate.valueOf() / 1000);
     var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
-    function updateDisplay(kwh) {
-      var kwhDisplay = Math.round(kwh * 1000)/1000;
-      scope.elec_gen.day[device] = kwhDisplay;
-    }
     updateElectric(scope,http,device,dayBegin,nowSeconds,
-                   updateDisplay);
+                   function(str){scope.elec_gen.day[device] = str});
   }
 
 
@@ -244,12 +238,8 @@
     // seconds:
     var nowSeconds = Math.round(nowDate.valueOf() / 1000);
     var weekBegin = Math.round(weekBeginDate.valueOf() / 1000);
-    function updateDisplay(kwh) {
-      var kwhDisplay = Math.round(kwh * 1000)/1000;
-      scope.elec_gen.week[device] = kwhDisplay;
-    }
     updateElectric(scope,http,device,weekBegin,nowSeconds,
-                   updateDisplay);
+                   function(str){scope.elec_gen.week[device] = str});
   }
 
   // update all time scales for electric generation for one device
