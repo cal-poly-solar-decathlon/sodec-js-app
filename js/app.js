@@ -20,6 +20,7 @@
   var SECONDS_IN_DAY = 86400;
   var SECONDS_IN_HOUR = 3600;
   var STALE_SECONDS = 6 * SECONDS_IN_HOUR;
+  var LATE_START_SECONDS = 6 * SECONDS_IN_HOUR;
   
   // these are the temperature and humidity devices
   var TEMP_HUM_DEVICES = [
@@ -170,30 +171,28 @@
   }
 
   
-  function updateElectric(scope,http,device,from,to,defaultToZero,kont) {
-    var windowBegin = from - STALE_SECONDS;
-    http.get(sodecUrl("interval-last-event",
+  function updateElectric(scope,http,device,from,to,kont) {
+    http.get(sodecUrl("interval-first-event",
                       [{p:"measurement",v:"electric_power"},
                        {p:"device",v:device},
-                       {p:"start",v:windowBegin},
-                       {p:"end",v:from}]))
+                       {p:"start",v:from},
+                       {p:"end",v:to}]))
       .then (function (result) {
-        var maybePrevLast = result.data;
-        var prevLast = ((defaultToZero && maybePrevLast === "no events")
-                       ? 0
-                       : maybePrevLast);
-        // give up unless we have a reading from prev period
-        if (prevLast !== "no events") {
+        var maybeFirst = result.data;
+        // give up in no events in range:
+        if (maybeFirst !== "no events") {
           http.get(sodecUrl("interval-last-event",
                             [{p:"measurement",v:"electric_power"},
                              {p:"device",v:device},
                              {p:"start",v:from},
                              {p:"end",v:to}]))
             .then(function (result) {
+              var startSeconds = maybeFirst.t / 1000;
+              var lateStart = (startSeconds - from) > LATE_START_SECONDS;
               var thisLast = result.data
               // give up unless we have a reading from today
               if (thisLast !== "no events") {
-                var wattseconds = thisLast - prevLast;
+                var wattseconds = thisLast - maybeFirst.r;
                 var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
                 kont(kwh);
               }
@@ -215,7 +214,7 @@
       var kwhDisplay = Math.round(kwh * 1000)/1000;
       scope.elec_use[device] = kwhDisplay;
     }
-    updateElectric(scope,http,device,dayBegin,nowSeconds,false,
+    updateElectric(scope,http,device,dayBegin,nowSeconds,
                    updateDisplay);
   }
 
@@ -232,7 +231,7 @@
       var kwhDisplay = Math.round(kwh * 1000)/1000;
       scope.elec_gen.day[device] = kwhDisplay;
     }
-    updateElectric(scope,http,device,dayBegin,nowSeconds,false,
+    updateElectric(scope,http,device,dayBegin,nowSeconds,
                    updateDisplay);
   }
 
@@ -249,7 +248,7 @@
       var kwhDisplay = Math.round(kwh * 1000)/1000;
       scope.elec_gen.week[device] = kwhDisplay;
     }
-    updateElectric(scope,http,device,weekBegin,nowSeconds,true,
+    updateElectric(scope,http,device,weekBegin,nowSeconds,
                    updateDisplay);
   }
 
