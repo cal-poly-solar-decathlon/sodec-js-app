@@ -1,5 +1,5 @@
 - implement a timeout & display gray if no data available
 - implement history pages
-- % and degree signs for temps and hums
 - logos at bottom of web page: Racket, InfluxDB, Cal Poly?
 - fahrenheit/celsius switch (render as oF/oC)
+- add footnote for incomplete days/weeks
