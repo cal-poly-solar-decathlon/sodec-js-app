@@ -27,6 +27,11 @@
            <div class="insightSubsection">
                 <h3>COMFORT</h3>
                 <div id="comfortInsights">
+                  <ul>
+                    <li ng-repeat="insight in insights">
+                      <span ng-class="insight.sp_class">{{insight.text}}</span>
+                    </li>
+                  </ul>
                </div>
            </div>
            <!-- <div class="insightSubsection">
@@ -59,16 +64,16 @@
                             <th>KITCHEN</th>
                         </tr>
                         <tr>
-                          <td ng-class="s_temp_obj_concern.outside"
-                              >{{s_temp_obj_display.outside}}</td>
-                          <td ng-class="s_temp_obj_concern.bedroom"
-                              >{{s_temp_obj_display.bedroom}}</td>
-                          <td ng-class="s_temp_obj_concern.living_room"
-                              >{{s_temp_obj_display.living_room}}</td>
-                          <td ng-class="s_temp_obj_concern.bathroom"
-                              >{{s_temp_obj_display.bathroom}}</td>
-                          <td ng-class="s_temp_obj_concern.kitchen"
-                              >{{s_temp_obj_display.kitchen}}</td>
+                          <td ng-class="temp.outside.cp_class"
+                              >{{temp.outside.text}}</td>
+                          <td ng-class="temp.bedroom.cp_class"
+                              >{{temp.bedroom.text}}</td>
+                          <td ng-class="temp.living_room.cp_class"
+                              >{{temp.living_room.text}}</td>
+                          <td ng-class="temp.bathroom.cp_class"
+                              >{{temp.bathroom.text}}</td>
+                          <td ng-class="temp.kitchen.cp_class"
+                              >{{temp.kitchen.text}}</td>
                         </tr>
                     </table>
                 </div>
@@ -83,7 +88,7 @@
             </div>
             <div class="col-md-10">
                 <div class="homepageDataTable" id="humidityDataTable">
-                    <div class="tableHeader">HUMIDITY (Rel. %)b</div>
+                    <div class="tableHeader">HUMIDITY (Rel. %)</div>
                     <table>
                         <tr>
                             <th>OUTSIDE</th>
@@ -93,16 +98,16 @@
                             <th>KITCHEN</th>
                         </tr>
                         <tr>
-                          <td ng-class="s_hum_obj_concern.outside"
-                              >{{s_hum_obj_display.outside}}</td>
-                          <td ng-class="s_hum_obj_concern.bedroom"
-                              >{{s_hum_obj_display.bedroom}}</td>
-                          <td ng-class="s_hum_obj_concern.living_room"
-                              >{{s_hum_obj_display.living_room}}</td>
-                          <td ng-class="s_hum_obj_concern.bathroom"
-                              >{{s_hum_obj_display.bathroom}}</td>
-                          <td ng-class="s_hum_obj_concern.kitchen"
-                              >{{s_hum_obj_display.kitchen}}</td>
+                          <td ng-class="hum.outside.cp_class"
+                              >{{hum.outside.text}}</td>
+                          <td ng-class="hum.bedroom.cp_class"
+                              >{{hum.bedroom.text}}</td>
+                          <td ng-class="hum.living_room.cp_class"
+                              >{{hum.living_room.text}}</td>
+                          <td ng-class="hum.bathroom.cp_class"
+                              >{{hum.bathroom.text}}</td>
+                          <td ng-class="hum.kitchen.cp_class"
+                              >{{hum.kitchen.text}}</td>
                         </tr>
                     </table>
                 </div>
@@ -138,15 +143,15 @@
                         </tr>
                         <tr>
                             <td>TODAY</td>
-                            <td>{{elec_gen.day.main_solar_array}}</td>
-                            <td>{{elec_gen.day.bifacial_solar_array}}</td>
-                            <td>{{elec_gen.day.mains}}</td>
+                            <td>{{elec_gen.day.main_solar_array.text}}</td>
+                            <td>{{elec_gen.day.bifacial_solar_array.text}}</td>
+                            <td>{{elec_gen.day.mains.text}}</td>
                         </tr>
                         <tr>
                             <td>THIS WEEK</td>
-                            <td>{{elec_gen.week.main_solar_array}}</td>
-                            <td>{{elec_gen.week.bifacial_solar_array}}</td>
-                            <td>{{elec_gen.week.mains}}</td>
+                            <td>{{elec_gen.week.main_solar_array.text}}</td>
+                            <td>{{elec_gen.week.bifacial_solar_array.tex}}</td>
+                            <td>{{elec_gen.week.mains.text}}</td>
                         </tr>
                         <!-- not going to have this data for the competition...
                         <tr>

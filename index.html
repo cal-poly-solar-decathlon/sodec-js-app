@@ -27,6 +27,11 @@
            <div class="insightSubsection">
                 <h3>COMFORT</h3>
                 <div id="comfortInsights">
+                  <ul>
+                    <li ng-repeat="insight in insights">
+                      <span ng-class="insight.sp_class">{{insight.text}}</span>
+                    </li>
+                  </ul>
                </div>
            </div>
            <!-- <div class="insightSubsection">
@@ -59,16 +64,16 @@
                             <th>KITCHEN</th>
                         </tr>
                         <tr>
-                          <td ng-class="s_temp_obj_concern.outside"
-                              >{{s_temp_obj_display.outside}}</td>
-                          <td ng-class="s_temp_obj_concern.bedroom"
-                              >{{s_temp_obj_display.bedroom}}</td>
-                          <td ng-class="s_temp_obj_concern.living_room"
-                              >{{s_temp_obj_display.living_room}}</td>
-                          <td ng-class="s_temp_obj_concern.bathroom"
-                              >{{s_temp_obj_display.bathroom}}</td>
-                          <td ng-class="s_temp_obj_concern.kitchen"
-                              >{{s_temp_obj_display.kitchen}}</td>
+                          <td ng-class="temp.outside.cp_class"
+                              >{{temp.outside.text}}</td>
+                          <td ng-class="temp.bedroom.cp_class"
+                              >{{temp.bedroom.text}}</td>
+                          <td ng-class="temp.living_room.cp_class"
+                              >{{temp.living_room.text}}</td>
+                          <td ng-class="temp.bathroom.cp_class"
+                              >{{temp.bathroom.text}}</td>
+                          <td ng-class="temp.kitchen.cp_class"
+                              >{{temp.kitchen.text}}</td>
                         </tr>
                     </table>
                 </div>
@@ -83,7 +88,7 @@
             </div>
             <div class="col-md-10">
                 <div class="homepageDataTable" id="humidityDataTable">
-                    <div class="tableHeader">HUMIDITY (Rel. %)b</div>
+                    <div class="tableHeader">HUMIDITY (Rel. %)</div>
                     <table>
                         <tr>
                             <th>OUTSIDE</th>
@@ -93,16 +98,16 @@
                             <th>KITCHEN</th>
                         </tr>
                         <tr>
-                          <td ng-class="s_hum_obj_concern.outside"
-                              >{{s_hum_obj_display.outside}}</td>
-                          <td ng-class="s_hum_obj_concern.bedroom"
-                              >{{s_hum_obj_display.bedroom}}</td>
-                          <td ng-class="s_hum_obj_concern.living_room"
-                              >{{s_hum_obj_display.living_room}}</td>
-                          <td ng-class="s_hum_obj_concern.bathroom"
-                              >{{s_hum_obj_display.bathroom}}</td>
-                          <td ng-class="s_hum_obj_concern.kitchen"
-                              >{{s_hum_obj_display.kitchen}}</td>
+                          <td ng-class="hum.outside.cp_class"
+                              >{{hum.outside.text}}</td>
+                          <td ng-class="hum.bedroom.cp_class"
+                              >{{hum.bedroom.text}}</td>
+                          <td ng-class="hum.living_room.cp_class"
+                              >{{hum.living_room.text}}</td>
+                          <td ng-class="hum.bathroom.cp_class"
+                              >{{hum.bathroom.text}}</td>
+                          <td ng-class="hum.kitchen.cp_class"
+                              >{{hum.kitchen.text}}</td>
                         </tr>
                     </table>
                 </div>
@@ -116,7 +121,7 @@
                 <img src="./images/energyUse150X150.png">
             </div>
             <div class="col-md-10">
-              <div class="homepageDataTable"><div class="tableHeader">ENERGY USE TODAY (kWh)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec_concern.laundry">{{elec_use.laundry}}</td><td ng-class="elec_concern.dishwasher">{{elec_use.dishwasher}}</td><td ng-class="elec_concern.refrigerator">{{elec_use.refrigerator}}</td><td ng-class="elec_concern.induction_stove">{{elec_use.induction_stove}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec_concern.microwave">{{elec_use.microwave}}</td><td ng-class="elec_concern.water_heater">{{elec_use.water_heater}}</td><td ng-class="elec_concern.greywater_pump">{{elec_use.greywater_pump}}</td><td ng-class="elec_concern.blackwater_pump">{{elec_use.blackwater_pump}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>VEHICLE</th><th>MECH OUTS</th></tr><tr><td ng-class="elec_concern.thermal_loop_pump">{{elec_use.thermal_loop_pump}}</td><td ng-class="elec_concern.water_supply_pump">{{elec_use.water_supply_pump}}</td><td ng-class="elec_concern.vehicle_charging">{{elec_use.vehicle_charging}}</td><td ng-class="elec_concern.mechanical_room_outlets">{{elec_use.mechanical_room_outlets}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>HEAT PUMP</th><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING</th></tr><tr><td ng-class="elec_concern.heat_pump">{{elec_use.heat_pump}}</td><td ng-class="elec_concern.air_handler">{{elec_use.air_handler}}</td><td ng-class="elec_concern.air_conditioning">{{elec_use.air_conditioning}}</td><td ng-class="elec_concern.lighting_1">{{elec_use.lighting_1}}</td></tr></table></div>
+              <div class="homepageDataTable"><div class="tableHeader">ENERGY USE TODAY (kWh)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec_use.laundry.cp_class">{{elec_use.laundry.text}}</td><td ng-class="elec_use.dishwasher.cp_class">{{elec_use.dishwasher.text}}</td><td ng-class="elec_use.refrigerator.cp_class">{{elec_use.refrigerator.text}}</td><td ng-class="elec_use.induction_stove.cp_class">{{elec_use.induction_stove.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec_use.microwave.cp_class">{{elec_use.microwave.text}}</td><td ng-class="elec_use.water_heater.cp_class">{{elec_use.water_heater.text}}</td><td ng-class="elec_use.greywater_pump.cp_class">{{elec_use.greywater_pump.text}}</td><td ng-class="elec_use.blackwater_pump.cp_class">{{elec_use.blackwater_pump.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>VEHICLE</th><th>MECH OUTS</th></tr><tr><td ng-class="elec_use.thermal_loop_pump.cp_class">{{elec_use.thermal_loop_pump.text}}</td><td ng-class="elec_use.water_supply_pump.cp_class">{{elec_use.water_supply_pump.text}}</td><td ng-class="elec_use.vehicle_charging.cp_class">{{elec_use.vehicle_charging.text}}</td><td ng-class="elec_use.mechanical_room_outlets.cp_class">{{elec_use.mechanical_room_outlets.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>HEAT PUMP</th><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING</th></tr><tr><td ng-class="elec_use.heat_pump.cp_class">{{elec_use.heat_pump.text}}</td><td ng-class="elec_use.air_handler.cp_class">{{elec_use.air_handler.text}}</td><td ng-class="elec_use.air_conditioning.cp_class">{{elec_use.air_conditioning.text}}</td><td ng-class="elec_use.lighting_1.cp_class">{{elec_use.lighting_1.text}}</td></tr></table></div>
             </div>
         </div>
     </div>
@@ -138,15 +143,15 @@
                         </tr>
                         <tr>
                             <td>TODAY</td>
-                            <td>{{elec_gen.day.main_solar_array}}</td>
-                            <td>{{elec_gen.day.bifacial_solar_array}}</td>
-                            <td>{{elec_gen.day.mains}}</td>
+                            <td>{{elec_gen.day.main_solar_array.text}}</td>
+                            <td>{{elec_gen.day.bifacial_solar_array.text}}</td>
+                            <td>{{elec_gen.day.mains.text}}</td>
                         </tr>
                         <tr>
                             <td>THIS WEEK</td>
-                            <td>{{elec_gen.week.main_solar_array}}</td>
-                            <td>{{elec_gen.week.bifacial_solar_array}}</td>
-                            <td>{{elec_gen.week.mains}}</td>
+                            <td>{{elec_gen.week.main_solar_array.text}}</td>
+                            <td>{{elec_gen.week.bifacial_solar_array.tex}}</td>
+                            <td>{{elec_gen.week.mains.text}}</td>
                         </tr>
                         <!-- not going to have this data for the competition...
                         <tr>

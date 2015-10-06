@@ -53,8 +53,8 @@
   (cons 'tr
         (for/list ([device-pair (in-list devices)])
           (define device-str (second device-pair))
-          `(td ((ng-class ,(~a "elec_concern."device-str)))
-               ,(handlebars (~a "elec_use."device-str))))))
+          `(td ((ng-class ,(~a "elec_use."device-str".cp_class")))
+               ,(handlebars (~a "elec_use."device-str".text"))))))
 
 
 
