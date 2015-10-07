@@ -3,3 +3,7 @@
 - logos at bottom of web page: Racket, InfluxDB, Cal Poly?
 - fahrenheit/celsius switch (render as oF/oC)
 - add footnote for incomplete days/weeks
+
+- too much space beside labels near bottom?
+- electrical usage displayed as negative
+- coloring for negative surplus?
