@@ -7,3 +7,4 @@
 - too much space beside labels near bottom?
 - electrical usage displayed as negative
 - coloring for negative surplus?
+- use angular.js filter to display values

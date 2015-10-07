@@ -364,10 +364,10 @@
       $scope.elec_gen = {day:{},week:{}};
       $scope.elec_use = {};
 
-      // update everything every fifteen seconds...
       var updater = updatePage.bind(undefined,$scope,$http);
       updater();
-      setInterval(updater, 15000);
+      // update everything every fifteen seconds...
+      // setInterval(maybeUpdater, 15000);
 
       /* SODECFORECAST.fetchForecast($http,function(forecast) {
          console.log(forecast);
