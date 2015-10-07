@@ -20,14 +20,15 @@
     ("GREYWATER" greywater_pump)
     ("BLACKWATER" blackwater_pump)
     ("THERMAL LOOP" thermal_loop_pump)
-    ("WATER SUPPLY" water_supply_pump) ;; FIXME!
-    ("VEHICLE" vehicle_charging)
+    ("WATER SUPPLY" water_supply_pump)
     ("MECH OUTS" mechanical_room_outlets)
-    ("HEAT PUMP" heat_pump)
+    ("HRV" heat_recovery_ventilation)
     ("AIR HANDLER" air_handler)
     ("A/C" air_conditioning)
-    ("LIGHTING" lighting_1) ;; FIXME
-
+    ("LIGHTING 1" lighting_1)
+    ("LIGHTING 2" lighting_2)
+    ("VEHICLE" vehicle_charging_station)
+    ("EVERYTHING ELSE" everything_else)
 ))
 
 
@@ -66,6 +67,7 @@
           (elec-use-row (take some-elec-gen-devices 4) #t)
           (elec-use-row (take (drop some-elec-gen-devices 4) 4) #f)
           (elec-use-row (take (drop some-elec-gen-devices 8) 4) #f)
-          (elec-use-row (take (drop some-elec-gen-devices 12) 4) #f))))
+          (elec-use-row (take (drop some-elec-gen-devices 12) 4) #f)
+          (elec-use-row (take (drop some-elec-gen-devices 16) 2) #f))))
    (build-path main "index.html")
    #:exists 'truncate))

@@ -35,18 +35,20 @@
       'dishwasher',
       'refrigerator',
       'induction_stove',
-      'microwave',
       'water_heater',
       'greywater_pump',
       'blackwater_pump',
       'thermal_loop_pump',
       'water_supply_pump',
-      'vehicle_charging',
+      'vehicle_charging_station',
       'mechanical_room_outlets',
-      'heat_pump',
+      'heat_recovery_ventilation',
       'air_handler',
       'air_conditioning',
-      'lighting_1'];
+      'microwave',
+      'lighting_1',
+      'lighting_2'
+    ];
 
     /* var ELECTRIC_POWER_GENERATION_DEVICES = [
       'main_solar_array',
@@ -193,8 +195,7 @@
       updateElectricInputWeek($scope,$http,device);
     }
 
-    // update all electric sensors. For these, we need to take the "derivative"
-    // (actually just the difference in the last two readings / time-diff
+    // update all standard loads
     function updateAllElectricUse($scope,http) {
       var deviceList = ELECTRIC_POWER_DEVICES;
       deviceList.map(function(device) {
