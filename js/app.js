@@ -160,10 +160,11 @@
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                       var kwhDisplay = kwhToString(kwh);
                        $scope.elec_use[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
     }
 
+    // update one electric input's daily figure
     // timestamp in seconds
     function updateElectricInputDay($scope,http,device) {
       // Dates:
@@ -175,10 +176,15 @@
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
-                       $scope.elec_gen.day[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
+                       var kwhDisplay = kwhToString(kwh);
+                       $scope.elec_gen.day[device] = {val:kwh,
+                                                      text:kwhDisplay,
+                                                      cp_class:'bogus'};
+                       updateElectricSurplusDay($scope);
+                     });
     }
 
+    // update one electric input's weekly figure
     function updateElectricInputWeek($scope,http,device) {
       // Dates:
       var nowDate = new Date();
@@ -189,8 +195,20 @@
       var weekBegin = Math.round(weekBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,weekBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                       var kwhDisplay = kwhToString(kwh);
                        $scope.elec_gen.week[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
+    }
+
+    // recompute the electrical surplus for the day
+    function updateElectricSurplusDay($scope) {
+      var solarNet = $scope.elec_gen.day.main_solar_array.val
+          + $scope.elec_gen.day.bifacial_solar_array.val;
+      // this is unfotunately negated...
+      var mainsNet = - $scope.elec_gen.day.mains.val;
+      var used = solarNet + mainsNet;
+      var surplus = -1 * mainsNet;
+      $scope.elec_gen.day.surplus = {val:surplus,text:kwhToString(surplus),cp_class:'bogus'};
+      $scope.elec_gen.day.total_used = {val:used,text:kwhToString(used),cp_class:'bogus'};
     }
 
     // update all time scales for electric generation for one device
@@ -298,6 +316,10 @@
                            ? 'highPriority'
                            : 'lowPriority');
       return {text:insight.m,sp_class:priorityClass};
+    }
+
+    function kwhToString(kwh) {
+      return ''+(Math.round(kwh * 1000) / 1000);
     }
 
     // update all of the page
