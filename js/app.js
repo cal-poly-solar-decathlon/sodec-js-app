@@ -142,8 +142,7 @@
                   // var lateStart = (startSeconds - from) > LATE_START_SECONDS;
                   var wattseconds = thisLast - maybeFirst.r;
                   var kwh = wattseconds / (1000 * SECONDS_IN_HOUR);
-                  var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
-                  kont(kwhDisplay);
+                  kont(kwh);
                 }
               });
           }
@@ -160,7 +159,9 @@
       var nowSeconds = Math.round(nowDate.valueOf() / 1000);
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
-                     function(str){$scope.elec_use[device] = {text:str,cp_class:'bogus'};});
+                     function(kwh){
+                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                       $scope.elec_use[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
     }
 
     // timestamp in seconds
@@ -173,9 +174,10 @@
       var nowSeconds = Math.round(nowDate.valueOf() / 1000);
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
-                     function(str){$scope.elec_gen.day[device] = {text:str,cp_class:'bogus'};});
+                     function(kwh){
+                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                       $scope.elec_gen.day[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
     }
-
 
     function updateElectricInputWeek($scope,http,device) {
       // Dates:
@@ -186,7 +188,9 @@
       var nowSeconds = Math.round(nowDate.valueOf() / 1000);
       var weekBegin = Math.round(weekBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,weekBegin,nowSeconds,
-                     function(str){$scope.elec_gen.week[device] = {text:str,cp_class:'bogus'};});
+                     function(kwh){
+                       var kwhDisplay = '' + (Math.round(kwh * 1000)/1000);
+                       $scope.elec_gen.week[device] = {val:kwh,text:kwhDisplay,cp_class:'bogus'};});
     }
 
     // update all time scales for electric generation for one device
