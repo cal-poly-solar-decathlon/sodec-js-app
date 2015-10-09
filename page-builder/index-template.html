@@ -144,17 +144,17 @@
                         </tr>
                         <tr>
                             <td>TODAY</td>
-                            <td>{{elec.day.main_solar_array.text}}</td>
-                            <td>{{elec.day.bifacial_solar_array.text}}</td>
-                            <td>{{elec.day.total_used.text}}</td>
-                            <td>{{elec.day.surplus.text}}</td>
+                            <td>{{elec.day.main_solar_array.val | electricGen}}</td>
+                            <td>{{elec.day.bifacial_solar_array.val | electricGen}}</td>
+                            <td>{{elec.day.total_used.val | electricGen}}</td>
+                            <td>{{elec.day.surplus.val | electricGen}}</td>
                         </tr>
                         <tr>
                             <td>THIS WEEK</td>
-                            <td>{{elec.week.main_solar_array.text}}</td>
-                            <td>{{elec.week.bifacial_solar_array.text}}</td>
-                            <td>{{elec.week.total_used.text}}</td>
-                            <td>{{elec.week.surplus.text}}</td>
+                            <td>{{elec.week.main_solar_array.val | electricGen}}</td>
+                            <td>{{elec.week.bifacial_solar_array.val | electricGen}}</td>
+                            <td>{{elec.week.total_used.val | electricGen}}</td>
+                            <td>{{elec.week.surplus.val | electricGen}}</td>
                         </tr>
                         <!-- not going to have this data for the competition...
                         <tr>

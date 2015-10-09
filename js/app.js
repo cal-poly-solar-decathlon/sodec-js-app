@@ -367,6 +367,14 @@
         var fahrenheit =  32 + (9.0/5.0) * cels;
         return tempToString(fahrenheit) + '°';
       };
+    }).filter('electricUse',function(){
+      return function(power){
+        return kwhToString(- power);
+      };
+    }).filter('electricGen',function(){
+      return function(power){
+        return kwhToString(power);
+      };
     }).controller('SolarHouseController', function($scope, $http) {
       $scope.temp = {};
       $scope.hum = {};
