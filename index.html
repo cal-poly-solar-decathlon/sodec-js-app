@@ -34,17 +34,6 @@
                   </ul>
                </div>
            </div>
-           <!-- <div class="insightSubsection">
-                <h3>WATER</h3>
-                <div  id="waterInsights">
-               <p>
-                   I noticed you used a lot of hot water today. In order to save water you can do the following things:
-                   <ul>
-                       <li>Take shorter showers</li>
-                   </ul>
-               </p>
-               </div>
-           </div> -->
        </div>
     </div>
     <div id="temperatureSection">
@@ -121,7 +110,7 @@
                 <img src="./images/energyUse150X150.png">
             </div>
             <div class="col-sm-10">
-              <div class="homepageDataTable"><div class="tableHeader">ENERGY USE TODAY (kWh)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec.day.laundry.cp_class">{{elec.day.laundry.text}}</td><td ng-class="elec.day.dishwasher.cp_class">{{elec.day.dishwasher.text}}</td><td ng-class="elec.day.refrigerator.cp_class">{{elec.day.refrigerator.text}}</td><td ng-class="elec.day.induction_stove.cp_class">{{elec.day.induction_stove.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec.day.microwave.cp_class">{{elec.day.microwave.text}}</td><td ng-class="elec.day.water_heater.cp_class">{{elec.day.water_heater.text}}</td><td ng-class="elec.day.greywater_pump.cp_class">{{elec.day.greywater_pump.text}}</td><td ng-class="elec.day.blackwater_pump.cp_class">{{elec.day.blackwater_pump.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>MECH OUTS</th><th>HRV</th></tr><tr><td ng-class="elec.day.thermal_loop_pump.cp_class">{{elec.day.thermal_loop_pump.text}}</td><td ng-class="elec.day.water_supply_pump.cp_class">{{elec.day.water_supply_pump.text}}</td><td ng-class="elec.day.mechanical_room_outlets.cp_class">{{elec.day.mechanical_room_outlets.text}}</td><td ng-class="elec.day.heat_recovery_ventilation.cp_class">{{elec.day.heat_recovery_ventilation.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING 1</th><th>LIGHTING 2</th></tr><tr><td ng-class="elec.day.air_handler.cp_class">{{elec.day.air_handler.text}}</td><td ng-class="elec.day.air_conditioning.cp_class">{{elec.day.air_conditioning.text}}</td><td ng-class="elec.day.lighting_1.cp_class">{{elec.day.lighting_1.text}}</td><td ng-class="elec.day.lighting_2.cp_class">{{elec.day.lighting_2.text}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>VEHICLE</th><th>EVERYTHING ELSE</th></tr><tr><td ng-class="elec.day.vehicle_charging_station.cp_class">{{elec.day.vehicle_charging_station.text}}</td><td ng-class="elec.day.everything_else.cp_class">{{elec.day.everything_else.text}}</td></tr></table></div>
+              <div class="homepageDataTable"><div class="tableHeader">ENERGY USE TODAY (kWh)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec.day.laundry.cp_class">{{elec.day.laundry.val | electricUse}}</td><td ng-class="elec.day.dishwasher.cp_class">{{elec.day.dishwasher.val | electricUse}}</td><td ng-class="elec.day.refrigerator.cp_class">{{elec.day.refrigerator.val | electricUse}}</td><td ng-class="elec.day.induction_stove.cp_class">{{elec.day.induction_stove.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec.day.microwave.cp_class">{{elec.day.microwave.val | electricUse}}</td><td ng-class="elec.day.water_heater.cp_class">{{elec.day.water_heater.val | electricUse}}</td><td ng-class="elec.day.greywater_pump.cp_class">{{elec.day.greywater_pump.val | electricUse}}</td><td ng-class="elec.day.blackwater_pump.cp_class">{{elec.day.blackwater_pump.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>MECH OUTS</th><th>HRV</th></tr><tr><td ng-class="elec.day.thermal_loop_pump.cp_class">{{elec.day.thermal_loop_pump.val | electricUse}}</td><td ng-class="elec.day.water_supply_pump.cp_class">{{elec.day.water_supply_pump.val | electricUse}}</td><td ng-class="elec.day.mechanical_room_outlets.cp_class">{{elec.day.mechanical_room_outlets.val | electricUse}}</td><td ng-class="elec.day.heat_recovery_ventilation.cp_class">{{elec.day.heat_recovery_ventilation.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING 1</th><th>LIGHTING 2</th></tr><tr><td ng-class="elec.day.air_handler.cp_class">{{elec.day.air_handler.val | electricUse}}</td><td ng-class="elec.day.air_conditioning.cp_class">{{elec.day.air_conditioning.val | electricUse}}</td><td ng-class="elec.day.lighting_1.cp_class">{{elec.day.lighting_1.val | electricUse}}</td><td ng-class="elec.day.lighting_2.cp_class">{{elec.day.lighting_2.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>VEHICLE</th><th>EVERYTHING ELSE</th></tr><tr><td ng-class="elec.day.vehicle_charging_station.cp_class">{{elec.day.vehicle_charging_station.val | electricUse}}</td><td ng-class="elec.day.everything_else.cp_class">{{elec.day.everything_else.val | electricUse}}</td></tr></table></div>
             </div>
         </div>
     </div>
@@ -156,12 +145,6 @@
                             <td>{{elec.week.total_used.val | electricGen}}</td>
                             <td>{{elec.week.surplus.val | electricGen}}</td>
                         </tr>
-                        <!-- not going to have this data for the competition...
-                        <tr>
-                            <td>LAST YEAR TODAY</td>
-                            <td></td>
-                            <td></td>
-                        </tr> -->
                     </table>
                 </div>
             </div>

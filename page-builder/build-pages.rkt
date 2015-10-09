@@ -55,7 +55,7 @@
         (for/list ([device-pair (in-list devices)])
           (define device-str (second device-pair))
           `(td ((ng-class ,(~a "elec.day."device-str".cp_class")))
-               ,(handlebars (~a "elec.day."device-str".text"))))))
+               ,(handlebars (~a "elec.day."device-str".val | electricUse"))))))
 
 
 
