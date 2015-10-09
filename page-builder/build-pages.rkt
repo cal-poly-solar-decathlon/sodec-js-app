@@ -7,7 +7,7 @@
 (define-runtime-path main "..")
 
 ;; plug vars into the index page template
-(define (make-index-page elec-use-rows)
+(define (make-index-page elec-use-rows elec-use-rate-rows)
   (include-template "index-template.html"))
 
 (define some-elec-gen-devices
@@ -39,7 +39,16 @@
                                     "ENERGY USE TODAY (kWh)"))]
                 [else (list)])
         (table ,(make-titles-row some-devices)
-               ,(make-contents-row some-devices))))
+               ,(make-contents-row some-devices "day"))))
+
+;; build a row of the electrical use rate table:
+(define (elec-use-rate-row some-devices first?)
+  `(div ((class "homepageDataTable"))
+        ,@(cond [first? (list `(div ((class "tableHeader"))
+                                    "LATEST RATE (kW)"))]
+                [else (list)])
+        (table ,(make-titles-row some-devices)
+               ,(make-contents-row some-devices "rate"))))
 
 ;; not trying to quote. Could be ugly.
 (define (handlebars str)
@@ -50,12 +59,12 @@
         (for/list ([device-pair (in-list devices)])
           `(th ,(first device-pair)))))
 
-(define (make-contents-row devices)
+(define (make-contents-row devices selector)
   (cons 'tr
         (for/list ([device-pair (in-list devices)])
           (define device-str (second device-pair))
           `(td ((ng-class ,(~a "elec.day."device-str".cp_class")))
-               ,(handlebars (~a "elec.day."device-str".val | electricUse"))))))
+               ,(handlebars (~a "elec."selector"."device-str".val | electricUse"))))))
 
 
 
@@ -68,6 +77,14 @@
           (elec-use-row (take (drop some-elec-gen-devices 4) 4) #f)
           (elec-use-row (take (drop some-elec-gen-devices 8) 4) #f)
           (elec-use-row (take (drop some-elec-gen-devices 12) 4) #f)
-          (elec-use-row (take (drop some-elec-gen-devices 16) 2) #f))))
+          (elec-use-row (take (drop some-elec-gen-devices 16) 2) #f)))
+    (map xexpr->string
+         (list
+          (elec-use-rate-row (take some-elec-gen-devices 4) #t)
+          (elec-use-rate-row (take (drop some-elec-gen-devices 4) 4) #f)
+          (elec-use-rate-row (take (drop some-elec-gen-devices 8) 4) #f)
+          (elec-use-rate-row (take (drop some-elec-gen-devices 12) 4) #f)
+          (elec-use-rate-row (take (drop some-elec-gen-devices 16) 2) #f)))
+    )
    (build-path main "index.html")
    #:exists 'truncate))

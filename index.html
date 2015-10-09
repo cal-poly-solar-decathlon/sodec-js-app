@@ -150,6 +150,16 @@
             </div>
         </div>
     </div>
+        <div id="energyUseRateSection">
+        <div class="row">
+            <div class="col-sm-2">
+                <img src="./images/energyUse150X150.png">
+            </div>
+            <div class="col-sm-10">
+              <div class="homepageDataTable"><div class="tableHeader">LATEST RATE (kW)</div><table><tr><th>LAUNDRY</th><th>DISHWASHER</th><th>REFRIGERATOR</th><th>COOKTOP</th></tr><tr><td ng-class="elec.day.laundry.cp_class">{{elec.rate.laundry.val | electricUse}}</td><td ng-class="elec.day.dishwasher.cp_class">{{elec.rate.dishwasher.val | electricUse}}</td><td ng-class="elec.day.refrigerator.cp_class">{{elec.rate.refrigerator.val | electricUse}}</td><td ng-class="elec.day.induction_stove.cp_class">{{elec.rate.induction_stove.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>MICROWAVE</th><th>WATER HEATER</th><th>GREYWATER</th><th>BLACKWATER</th></tr><tr><td ng-class="elec.day.microwave.cp_class">{{elec.rate.microwave.val | electricUse}}</td><td ng-class="elec.day.water_heater.cp_class">{{elec.rate.water_heater.val | electricUse}}</td><td ng-class="elec.day.greywater_pump.cp_class">{{elec.rate.greywater_pump.val | electricUse}}</td><td ng-class="elec.day.blackwater_pump.cp_class">{{elec.rate.blackwater_pump.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>THERMAL LOOP</th><th>WATER SUPPLY</th><th>MECH OUTS</th><th>HRV</th></tr><tr><td ng-class="elec.day.thermal_loop_pump.cp_class">{{elec.rate.thermal_loop_pump.val | electricUse}}</td><td ng-class="elec.day.water_supply_pump.cp_class">{{elec.rate.water_supply_pump.val | electricUse}}</td><td ng-class="elec.day.mechanical_room_outlets.cp_class">{{elec.rate.mechanical_room_outlets.val | electricUse}}</td><td ng-class="elec.day.heat_recovery_ventilation.cp_class">{{elec.rate.heat_recovery_ventilation.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>AIR HANDLER</th><th>A/C</th><th>LIGHTING 1</th><th>LIGHTING 2</th></tr><tr><td ng-class="elec.day.air_handler.cp_class">{{elec.rate.air_handler.val | electricUse}}</td><td ng-class="elec.day.air_conditioning.cp_class">{{elec.rate.air_conditioning.val | electricUse}}</td><td ng-class="elec.day.lighting_1.cp_class">{{elec.rate.lighting_1.val | electricUse}}</td><td ng-class="elec.day.lighting_2.cp_class">{{elec.rate.lighting_2.val | electricUse}}</td></tr></table></div><div class="homepageDataTable"><table><tr><th>VEHICLE</th><th>EVERYTHING ELSE</th></tr><tr><td ng-class="elec.day.vehicle_charging_station.cp_class">{{elec.rate.vehicle_charging_station.val | electricUse}}</td><td ng-class="elec.day.everything_else.cp_class">{{elec.rate.everything_else.val | electricUse}}</td></tr></table></div>
+            </div>
+        </div>
+    </div>
 <!--    <div class="row">
       <div class="col-sm-12">
         <div class="btn-group" role="group" aria-label="...">

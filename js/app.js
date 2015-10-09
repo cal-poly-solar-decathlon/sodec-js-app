@@ -149,6 +149,34 @@
         });
     }
 
+        // update instantaneous electric use for one device
+    function updateElectricRate($scope,http,device) {
+      // Dates:
+      var nowSeconds = Math.round(Date.now() / 1000);
+      var minuteAgoSeconds = nowSeconds - 60;
+      http.get(sodecUrl('events-in-range',
+                        [{p:'measurement',v:'electric_power'},
+                         {p:'device',v:device},
+                         {p:'start',v:minuteAgoSeconds},
+                         {p:'end',v:nowSeconds}]))
+        .then(function(result){
+          var events = result.data;
+          if (events.length < 2){
+            $scope.elec.rate[device] = false;
+          } else {
+            // in watt-seconds:
+            var readingDiff = events[events.length - 1].r
+                - events[events.length - 2].r;
+            // in seconds:
+            var timeDiff = (events[events.length -1].t
+                            - events[events.length - 2].t) / 1000;
+            var watts = readingDiff / timeDiff;
+            $scope.elec.rate[device] = {val:watts / 1000};
+            updateMissingPower($scope,'rate');
+          }
+        });
+    }
+
     // update electric use for the day on one device
     function updateElectricUseDay($scope,http,device) {
       // Dates:
@@ -160,11 +188,9 @@
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = kwhToString(kwh);
                        $scope.elec.day[device] = {val:kwh,
-                                                  text:kwhDisplay,
                                                   cp_class:'bogus'};
-                       updateMissingPower($scope);
+                       updateMissingPower($scope,'day');
                      });
     }
 
@@ -180,12 +206,10 @@
       var dayBegin = Math.round(dayBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = kwhToString(kwh);
                        $scope.elec.day[device] = {val:kwh,
-                                                  text:kwhDisplay,
                                                   cp_class:'bogus'};
                        updateElectricSurplus($scope,'day');
-                       updateMissingPower($scope);
+                       updateMissingPower($scope,'day');
                      });
     }
 
@@ -200,9 +224,7 @@
       var weekBegin = Math.round(weekBeginDate.valueOf() / 1000);
       updateElectric($scope,http,device,weekBegin,nowSeconds,
                      function(kwh){
-                       var kwhDisplay = kwhToString(kwh);
                        $scope.elec.week[device] = {val:kwh,
-                                                   text:kwhDisplay,
                                                    cp_class:'bogus'};
                        updateElectricSurplus($scope,'week');
                      });
@@ -218,28 +240,27 @@
       var used = solarNet + mainsNet;
       var surplus = -1 * mainsNet;
       $scope.elec[timeLabel].surplus = {val:surplus,
-                                            text:kwhToString(surplus),
                                             cp_class:'bogus'};
       $scope.elec[timeLabel].total_used = {val:used,
-                                               text:kwhToString(used),
-                                               cp_class:'bogus'};
+                                           cp_class:'bogus'};
     }
 
-    function updateMissingPower($scope){
+    // given a scope and a selector ('day','rate'), compute missing power
+    function updateMissingPower($scope,selector){
       var totalKnownUse = 0;
       for (var i=0;i<ELECTRIC_POWER_DEVICES.length;i++) {
-        totalKnownUse += $scope.elec.day[ELECTRIC_POWER_DEVICES[i]].val;
+        totalKnownUse += $scope.elec[selector][ELECTRIC_POWER_DEVICES[i]].val;
       }
-      var leftover = - ($scope.elec.day.total_used.val + totalKnownUse);
-      $scope.elec.day.everything_else = {val:leftover,
-                                         text:kwhToString(leftover),
-                                        cp_class:'bogus'};
+      var leftover = - ($scope.elec[selector].total_used.val + totalKnownUse);
+      $scope.elec[selector].everything_else = {val:leftover,
+                                               cp_class:'bogus'};
     }
 
     // update all time scales for electric generation for one device
     function updateElectricInputDayAndWeek($scope,$http,device) {
       updateElectricInputDay($scope,$http,device);
       updateElectricInputWeek($scope,$http,device);
+      updateElectricRate($scope,$http,device);
     }
 
     // update all standard loads
@@ -247,6 +268,7 @@
       var deviceList = ELECTRIC_POWER_DEVICES;
       deviceList.map(function(device) {
         updateElectricUseDay($scope,http,device);
+        updateElectricRate($scope,http,device);
       });
     }
 
