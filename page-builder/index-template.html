@@ -54,7 +54,7 @@
             </div>
             <div class="col-sm-10">
                 <div class="homepageDataTable">
-                    <div class="tableHeader">TEMPERATURE (°C)<!-- <div class="pull-right tempSettings"></div>--></div>
+                    <div class="tableHeader">TEMPERATURE (°F)<!-- <div class="pull-right tempSettings"></div>--></div>
                     <table>
                         <tr>
                             <th>OUTSIDE</th>
@@ -65,15 +65,15 @@
                         </tr>
                         <tr>
                           <td ng-class="temp.outside.cp_class"
-                              >{{temp.outside.text}}</td>
+                              >{{temp.outside.val | cToF}}</td>
                           <td ng-class="temp.bedroom.cp_class"
-                              >{{temp.bedroom.text}}</td>
+                              >{{temp.bedroom.val | cToF}}</td>
                           <td ng-class="temp.living_room.cp_class"
-                              >{{temp.living_room.text}}</td>
+                              >{{temp.living_room.val | cToF}}</td>
                           <td ng-class="temp.bathroom.cp_class"
-                              >{{temp.bathroom.text}}</td>
+                              >{{temp.bathroom.val | cToF}}</td>
                           <td ng-class="temp.kitchen.cp_class"
-                              >{{temp.kitchen.text}}</td>
+                              >{{temp.kitchen.val | cToF}}</td>
                         </tr>
                     </table>
                 </div>
@@ -144,17 +144,17 @@
                         </tr>
                         <tr>
                             <td>TODAY</td>
-                            <td>{{elec_gen.day.main_solar_array.text}}</td>
-                            <td>{{elec_gen.day.bifacial_solar_array.text}}</td>
-                            <td>{{elec_gen.day.total_used.text}}</td>
-                            <td>{{elec_gen.day.surplus.text}}</td>
+                            <td>{{elec.day.main_solar_array.text}}</td>
+                            <td>{{elec.day.bifacial_solar_array.text}}</td>
+                            <td>{{elec.day.total_used.text}}</td>
+                            <td>{{elec.day.surplus.text}}</td>
                         </tr>
                         <tr>
                             <td>THIS WEEK</td>
-                            <td>{{elec_gen.week.main_solar_array.text}}</td>
-                            <td>{{elec_gen.week.bifacial_solar_array.text}}</td>
-                            <td>{{elec_gen.week.total_used.text}}</td>
-                            <td>{{elec_gen.week.surplus.text}}</td>
+                            <td>{{elec.week.main_solar_array.text}}</td>
+                            <td>{{elec.week.bifacial_solar_array.text}}</td>
+                            <td>{{elec.week.total_used.text}}</td>
+                            <td>{{elec.week.surplus.text}}</td>
                         </tr>
                         <!-- not going to have this data for the competition...
                         <tr>

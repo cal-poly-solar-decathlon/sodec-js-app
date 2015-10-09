@@ -161,7 +161,7 @@
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
                        var kwhDisplay = kwhToString(kwh);
-                       $scope.elec_use[device] = {val:kwh,
+                       $scope.elec.day[device] = {val:kwh,
                                                   text:kwhDisplay,
                                                   cp_class:'bogus'};
                        updateMissingPower($scope);
@@ -181,9 +181,9 @@
       updateElectric($scope,http,device,dayBegin,nowSeconds,
                      function(kwh){
                        var kwhDisplay = kwhToString(kwh);
-                       $scope.elec_gen.day[device] = {val:kwh,
-                                                      text:kwhDisplay,
-                                                      cp_class:'bogus'};
+                       $scope.elec.day[device] = {val:kwh,
+                                                  text:kwhDisplay,
+                                                  cp_class:'bogus'};
                        updateElectricSurplus($scope,'day');
                        updateMissingPower($scope);
                      });
@@ -201,9 +201,9 @@
       updateElectric($scope,http,device,weekBegin,nowSeconds,
                      function(kwh){
                        var kwhDisplay = kwhToString(kwh);
-                       $scope.elec_gen.week[device] = {val:kwh,
-                                                       text:kwhDisplay,
-                                                       cp_class:'bogus'};
+                       $scope.elec.week[device] = {val:kwh,
+                                                   text:kwhDisplay,
+                                                   cp_class:'bogus'};
                        updateElectricSurplus($scope,'week');
                      });
     }
@@ -211,16 +211,16 @@
     // given the scope and 'day' or 'week',
     // recompute the electrical surplus for the day or week
     function updateElectricSurplus($scope,timeLabel) {
-      var solarNet = $scope.elec_gen[timeLabel].main_solar_array.val
-          + $scope.elec_gen[timeLabel].bifacial_solar_array.val;
+      var solarNet = $scope.elec[timeLabel].main_solar_array.val
+          + $scope.elec[timeLabel].bifacial_solar_array.val;
       // this is unfotunately negated...
-      var mainsNet = - $scope.elec_gen[timeLabel].mains.val;
+      var mainsNet = - $scope.elec[timeLabel].mains.val;
       var used = solarNet + mainsNet;
       var surplus = -1 * mainsNet;
-      $scope.elec_gen[timeLabel].surplus = {val:surplus,
+      $scope.elec[timeLabel].surplus = {val:surplus,
                                             text:kwhToString(surplus),
                                             cp_class:'bogus'};
-      $scope.elec_gen[timeLabel].total_used = {val:used,
+      $scope.elec[timeLabel].total_used = {val:used,
                                                text:kwhToString(used),
                                                cp_class:'bogus'};
     }
@@ -228,10 +228,10 @@
     function updateMissingPower($scope){
       var totalKnownUse = 0;
       for (var i=0;i<ELECTRIC_POWER_DEVICES.length;i++) {
-        totalKnownUse += $scope.elec_use[ELECTRIC_POWER_DEVICES[i]].val;
+        totalKnownUse += $scope.elec.day[ELECTRIC_POWER_DEVICES[i]].val;
       }
-      var leftover = - ($scope.elec_gen.day.total_used.val + totalKnownUse);
-      $scope.elec_use.everything_else = {val:leftover,
+      var leftover = - ($scope.elec.day.total_used.val + totalKnownUse);
+      $scope.elec.day.everything_else = {val:leftover,
                                          text:kwhToString(leftover),
                                         cp_class:'bogus'};
     }
@@ -291,7 +291,7 @@
         $scope.temp[id] = {text:'n/a',cp_class:'no_concern'};
       } else {
         var numReading = parseInt(reading)/10;
-        $scope.temp[id] = {text:numReading + '°',cp_class:'no_concern'};
+        $scope.temp[id] = {val:numReading,text:numReading + '°',cp_class:'no_concern'};
         //((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? 'concern' : 'no_concern')
       }
     }
@@ -304,7 +304,7 @@
         var numReading = parseInt(reading)/10;
         var isConcern =
             ((numReading > HUMIDITY_CONCERN_THRESHOLD) ? 'concern' : 'no_concern');
-        $scope.hum[id] = {text:numReading + '%',cp_class:isConcern};
+        $scope.hum[id] = {val:numReading,text:numReading + '%',cp_class:isConcern};
       }
     }
 
@@ -347,6 +347,10 @@
       return ''+(Math.round(kwh * 1000) / 1000);
     }
 
+    function tempToString(temp){
+      return ''+(Math.round(temp*10)/10);
+    }
+
     // update all of the page
     function updatePage($scope,$http){
       updateSome($scope,$http,'temperature');
@@ -358,11 +362,15 @@
       updateAllElectricUse($scope,$http);
     }
 
-    app.controller('SolarHouseController', function($scope, $http) {
+    app.filter('cToF', function() {
+      return function(cels) {
+        var fahrenheit =  32 + (9.0/5.0) * cels;
+        return tempToString(fahrenheit) + '°';
+      };
+    }).controller('SolarHouseController', function($scope, $http) {
       $scope.temp = {};
       $scope.hum = {};
-      $scope.elec_gen = {day:{},week:{}};
-      $scope.elec_use = {};
+      $scope.elec = {day:{},week:{},rate:{}};
 
       var updater = updatePage.bind(undefined,$scope,$http);
       updater();
