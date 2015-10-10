@@ -149,8 +149,10 @@
         });
     }
 
-        // update instantaneous electric use for one device
-    function updateElectricRate($scope,http,device) {
+    // update instantaneous electric use for one device. If updateSurplus
+    // is true, recomputes total_used and surplus (only necessary if it's
+    // an input)
+    function updateElectricRate($scope,http,device,updateSurplus) {
       // Dates:
       var nowSeconds = Math.round(Date.now() / 1000);
       var minuteAgoSeconds = nowSeconds - 60;
@@ -172,6 +174,9 @@
                             - events[events.length - 2].t) / 1000;
             var watts = readingDiff / timeDiff;
             $scope.elec.rate[device] = {val:watts / 1000};
+            if (updateSurplus){
+              updateElectricSurplus($scope,'rate');
+            }
             updateMissingPower($scope,'rate');
           }
         });
@@ -230,7 +235,7 @@
                      });
     }
 
-    // given the scope and 'day' or 'week',
+    // given the scope and 'day' or 'week' or 'rate'
     // recompute the electrical surplus for the day or week
     function updateElectricSurplus($scope,timeLabel) {
       var solarNet = $scope.elec[timeLabel].main_solar_array.val
@@ -260,7 +265,7 @@
     function updateElectricInputDayAndWeek($scope,$http,device) {
       updateElectricInputDay($scope,$http,device);
       updateElectricInputWeek($scope,$http,device);
-      updateElectricRate($scope,$http,device);
+      updateElectricRate($scope,$http,device,true);
     }
 
     // update all standard loads
@@ -268,7 +273,7 @@
       var deviceList = ELECTRIC_POWER_DEVICES;
       deviceList.map(function(device) {
         updateElectricUseDay($scope,http,device);
-        updateElectricRate($scope,http,device);
+        updateElectricRate($scope,http,device,false);
       });
     }
 
