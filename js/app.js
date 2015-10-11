@@ -12,6 +12,11 @@
     /*var HOST = 'localhost';
       var PORT =  3000;*/
 
+    var CONTEST_START_YEAR = 2015;
+    var CONTEST_START_MONTH = 9; // january is 0
+    var CONTEST_START_DATE = 8;
+    var CONTEST_START_HOUR = 11;
+
     // temperature expressed in degrees:
     //var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
     var HUMIDITY_CONCERN_THRESHOLD = 50.0;
@@ -235,7 +240,25 @@
                      });
     }
 
-    // given the scope and 'day' or 'week' or 'rate'
+    // update one electric input's contest figure
+    function updateElectricInputContest($scope,http,device) {
+      // Dates:
+      var nowDate = new Date();
+      var contestBeginDate = new Date(CONTEST_START_YEAR,CONTEST_START_MONTH,
+                                      CONTEST_START_DATE,CONTEST_START_HOUR);
+      // seconds:
+      var nowSeconds = Math.round(nowDate.valueOf() / 1000);
+      var contestBegin = Math.round(contestBeginDate.valueOf() / 1000);
+      updateElectric($scope,http,device,contestBegin,nowSeconds,
+                     function(kwh){
+                       var kwhDisplay = kwhToString(kwh);
+                       $scope.elec.contest[device] = {val:kwh,
+                                                      cp_class:'bogus'};
+                       updateElectricSurplus($scope,'contest');
+                     });
+    }
+
+    // given the scope and 'day' or 'week' or 'rate' or 'contest',
     // recompute the electrical surplus for the day or week
     function updateElectricSurplus($scope,timeLabel) {
       var solarNet = $scope.elec[timeLabel].main_solar_array.val
@@ -264,8 +287,9 @@
     // update all time scales for electric generation for one device
     function updateElectricInputDayAndWeek($scope,$http,device) {
       updateElectricInputDay($scope,$http,device);
-      updateElectricInputWeek($scope,$http,device);
+      updateElectricInputContest($scope,$http,device);
       updateElectricRate($scope,$http,device,true);
+      //updateElectricInputWeek($scope,$http,device);
     }
 
     // update all standard loads
@@ -405,7 +429,7 @@
     }).controller('SolarHouseController', function($scope, $http) {
       $scope.temp = {};
       $scope.hum = {};
-      $scope.elec = {day:{},week:{},rate:{}};
+      $scope.elec = {day:{},week:{},contest:{},rate:{}};
 
       var updater = updatePage.bind(undefined,$scope,$http);
       updater();
