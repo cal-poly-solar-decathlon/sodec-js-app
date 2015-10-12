@@ -19,6 +19,7 @@
 
     // temperature expressed in degrees:
     //var TEMPERATURE_CONCERN_LO_THRESHOLD = 20.0;
+    var TEMPERATURE_CONCERN_HI_THRESHOLD = 24.4;
     var HUMIDITY_CONCERN_THRESHOLD = 50.0;
     //var ELECTRIC_USE_CONCERN_THRESHOLD = 400.0;
 
@@ -342,8 +343,9 @@
         $scope.temp[id] = {text:'n/a',cp_class:'no_concern'};
       } else {
         var numReading = parseInt(reading)/10;
-        $scope.temp[id] = {val:numReading,text:numReading + '°',cp_class:'no_concern'};
-        //((numReading > TEMPERATURE_CONCERN_THRESHOLD) ? 'concern' : 'no_concern')
+        var concern = ((numReading > TEMPERATURE_CONCERN_HI_THRESHOLD)
+                       ? 'concern' : 'no_concern');
+        $scope.temp[id] = {val:numReading,cp_class:concern};
       }
     }
 
@@ -355,7 +357,7 @@
         var numReading = parseInt(reading)/10;
         var isConcern =
             ((numReading > HUMIDITY_CONCERN_THRESHOLD) ? 'concern' : 'no_concern');
-        $scope.hum[id] = {val:numReading,text:numReading + '%',cp_class:isConcern};
+        $scope.hum[id] = {val:numReading,text:numReading+'%',cp_class:isConcern};
       }
     }
 
